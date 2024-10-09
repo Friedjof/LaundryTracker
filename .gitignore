@@ -1,0 +1,10 @@
+db.sqlite3
+db.sqlite3-journal
+
+.venv/
+
+.idea/
+
+*.pyc
+
+*.env

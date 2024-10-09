@@ -1,0 +1,173 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background-color: #f0c66e;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    padding: 0;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.machine-button {
+    width: 80px;
+    height: 80px;
+    margin: 10px;
+    border-radius: 50%;
+    border: 2px solid black; /* Black border */
+    display: inline-block;
+    text-align: center;
+    line-height: 80px;
+    font-size: 18px;
+    color: black;
+    cursor: pointer;
+}
+.machine-button.off {
+    background-color: #1c6d2e; /* Green color for available machines */
+    color: white; /* White text for better contrast */
+    font-weight: bold;
+}
+.machine-button.on {
+    background-color: #baefba; /* Muted grey for finished machines */
+}
+.machine-button.running {
+    background-color: #F4D03F; /* Softer yellow for running machines */
+    box-shadow: 0 0 10px 2px #F4D03F;
+}
+.machine-button.defect {
+    background-color: #d3d3d3; /* Light grey for defect machines */
+    color: #a9a9a9; /* Dark grey text */
+    cursor: not-allowed; /* Change cursor to indicate non-interactive */
+}
+.machine-button-label {
+    font-size: 14px;
+    color: #003f5c; /* Darker color for text */
+    text-align: center;
+}
+.machine-header {
+    font-weight: bold;
+    border-bottom: 2px solid;
+    padding-bottom: 5px;
+}
+
+.machine-header.off {
+    border-bottom-color: #4caf50; /* Green color for available machines */
+}
+
+.machine-header.running {
+    border-bottom-color: #ff9800; /* Orange color for running machines */
+}
+
+.machine-header.on {
+    border-bottom-color: #2196f3; /* Blue color for finished machines */
+}
+
+.machine-header.defect {
+    border-bottom-color: #f44336; /* Red color for defect machines */
+}
+
+.container {
+    text-align: center;
+    margin-top: 50px;
+    flex: 1;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-body label {
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: white;
+    font-weight: bold;
+}
+
+
+/* Extra small devices (phones, up to 360px) */
+@media (max-width: 360px) {
+    h1 {
+        font-size: 4px;
+    }
+    .header-image {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    .header-image {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Small devices (phones, 576px and up) */
+@media (min-width: 576px) {
+    h1 {
+        font-size: 1.75rem;
+    }
+    .header-image {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    .header-image {
+        width: 85px;
+        height: 85px;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    h1 {
+        font-size: 2.25rem;
+    }
+    .header-image {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    .header-image {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+.custom-404-background {
+    background-color: rgba(0, 0, 0, 0.8); /* 80% transparent dark background */
+    border-radius: 10px; /* Rounded corners */
+    color: white; /* Text color */
+    padding: 20px; /* Optional: Add some padding */
+}
