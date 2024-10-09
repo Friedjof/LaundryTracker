@@ -3,7 +3,7 @@ name: Build, Publish Docker Image, and Create Release
 on:
   push:
     tags:
-      - 'v*'  # Trigger bei jedem neuen Tag, der mit "v" beginnt, z.B. "v0.0.1"
+      - 'v*'  # Trigger bei jedem neuen Tag, der mit "v" beginnt, z.B. "v0.0.2"
 
 jobs:
   build:
@@ -29,8 +29,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/laundrytracker:${{ github.ref_name }}
-            ghcr.io/${{ github.repository_owner }}/laundrytracker:latest
+            ghcr.io/${{ github.repository_owner }}/$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]'):${{ github.ref_name }}
+            ghcr.io/${{ github.repository_owner }}/$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]'):latest
 
       - name: Create GitHub Release
         id: create_release
@@ -40,6 +40,6 @@ jobs:
           release_name: Release ${{ github.ref_name }}
           body: |
             This release is automatically generated from the new tag.
-            Docker image is available under ghcr.io/${{ github.repository_owner }}/laundrytracker:${{ github.ref_name }}
+            Docker image is available under ghcr.io/${{ github.repository_owner }}/$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]'):${{ github.ref_name }}
           draft: false
           prerelease: false
