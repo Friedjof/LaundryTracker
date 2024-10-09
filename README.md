@@ -1,5 +1,3 @@
-### README.md
-
 # LaundryTracker
 
 LaundryTracker is a simple web application built with Django that allows users to track the availability and status of laundry machines (washers and dryers) in a building. The application features a real-time status update system where users can view whether a machine is available, running, finished, or defective. Additionally, users can set timers for machines and view the remaining time on active machines.
@@ -11,6 +9,11 @@ LaundryTracker is a simple web application built with Django that allows users t
 - User-friendly interface for setting timers on machines.
 - Ability to mark machines as "Available" after they finish running.
 - CSRF protection enabled for secure communication.
+
+## Screenshots
+![demo-home](/static/media/demo-home.png)
+![demo-done](/static/media/demo-done.png)
+![demo-report-defect](/static/media/demo-report-defect.png)
 
 ## Installation
 
