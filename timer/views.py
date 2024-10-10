@@ -106,6 +106,10 @@ def set_defect(request, building, machine_id):
             return JsonResponse({'status': 'error', 'message': 'Invalid machine or building'}, status=400)
 
         notes = request.POST.get('notes', '')
+
+        if len(notes) > 500:
+            return JsonResponse({'status': 'error', 'message': 'Notes too long'}, status=400)
+
         machine.set_notes(notes)
         machine.set_defect()
 

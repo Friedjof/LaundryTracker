@@ -39,10 +39,10 @@ class Machine(models.Model):
     machine_status = models.CharField(max_length=1, choices=MACHINE_STATUS, default='A')
 
     timer = models.PositiveIntegerField(default=0)
-    timer_start = models.DateTimeField(null=True, blank=True)
+    timer_start = models.DateTimeField(default=timezone.now)
 
     notes = models.TextField(blank=True)
-    notes_date = models.DateTimeField(null=True, blank=True)
+    notes_date = models.DateTimeField(default=timezone.now)
 
 
     def start_timer(self, timer: int = 90):
@@ -75,6 +75,7 @@ class Machine(models.Model):
 
     def set_available(self):
         self.machine_status = 'A'
+        self.timer_start = datetime.now()
         self.save()
 
     def _get_building_display(self):
