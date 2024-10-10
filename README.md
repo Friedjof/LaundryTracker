@@ -105,62 +105,7 @@ Once the server is running, you can navigate to the home page, select your build
 - The application updates the machine status every 10 seconds to reflect real-time changes.
 
 ## API Endpoints
-
-### 1. **GET `/building/<str:building>/`**
-   - **Description**: Retrieves the laundry machine status for a specific building and renders the web page.
-   - **Method**: `GET`
-   - **Parameters**:
-     - `building`: The code for the building.
-   - **Response**: HTML page with machine statuses.
-
-### 2. **POST `/building/<str:building>/`**
-   - **Description**: Fetches the latest machine statuses for the specified building in JSON format. This is used for real-time updates on the frontend.
-   - **Method**: `POST`
-   - **Parameters**:
-     - `building`: The code for the building.
-   - **Response**: JSON containing updated machine statuses.
-
-### 3. **POST `/building/<str:building>/laundry/<int:machine_id>/`**
-   - **Description**: Sets a timer for a specific machine (washer or dryer) in the given building.
-   - **Method**: `POST`
-   - **Parameters**:
-     - `building`: The code for the building.
-     - `machine_id`: The ID of the machine.
-   - **Request Body**: 
-     - `timerDuration`: The duration (in minutes) to set the timer.
-   - **Response**: Success or failure message in JSON format.
-
-### 4. **POST `/building/<str:building>/laundry/<int:machine_id>/available/`**
-   - **Description**: Marks a specific machine as available after it has finished running.
-   - **Method**: `POST`
-   - **Parameters**:
-     - `building`: The code for the building.
-     - `machine_id`: The ID of the machine.
-   - **Response**: Success or failure message in JSON format.
-
-### 5. **GET `/building/<str:building>/laundry/<int:machine_id>/notes/`**
-   - **Description**: Retrieves any notes or comments associated with the specified machine.
-   - **Method**: `GET`
-   - **Parameters**:
-     - `building`: The code for the building.
-     - `machine_id`: The ID of the machine.
-   - **Response**: JSON containing machine notes.
-
-### 6. **POST `/building/<str:building>/laundry/<int:machine_id>/defect/`**
-   - **Description**: Marks a machine as defective if it is broken or malfunctioning.
-   - **Method**: `POST`
-   - **Parameters**:
-     - `building`: The code for the building.
-     - `machine_id`: The ID of the machine.
-   - **Response**: Success or failure message in JSON format.
-
-### 7. **POST `/building/<str:building>/laundry/<int:machine_id>/repair/`**
-   - **Description**: Marks a machine as repaired after it has been fixed.
-   - **Method**: `POST`
-   - **Parameters**:
-     - `building`: The code for the building.
-     - `machine_id`: The ID of the machine.
-   - **Response**: Success or failure message in JSON format.
+> Coming soon…
 
 ## Configuration
 
