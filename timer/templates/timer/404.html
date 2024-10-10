@@ -23,28 +23,24 @@
 </head>
 <body style="background: url('{% static 'media/bg-404.webp' %}') no-repeat center center fixed; background-size: cover;">
     <!-- Header -->
-    <header>
-        <div class="row align-items-center bg-dark text-white p-1 mx-2" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-            <div class="col-auto m-0 p-1">
-                <img src="{% static 'media/favicon.webp' %}" class="header-image rounded" alt="Icon">
-            </div>
-            <div class="col text-start m-0 px-2">
-                <h1 class="mb-1">Laundry Tracker</h1>
-                <p class="lead mb-0">Keep track of laundry machines</p>
-            </div>
-        </div>
-    </header>
+    {% include 'includes/static-header.html' %}
 
     <!-- Main Content -->
     <div class="container my-5 position-relative">
         <div class="row justify-content-center">
-            <div class="col-md-8 text-center p-5" style="color: white; background-color: rgba(60,7,20,0.95); border-radius: 10px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);">
+            <div class="col-md-8 text-center p-5" style="color: white; background-color: rgba(142,86,59,0.95); border-radius: 10px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);">
                 <h2>Oops! The page you're looking for doesn't exist.</h2>
                 <p>It seems like the page has been moved or never existed.</p>
-                <p style="color: black; background-color: #f4b400; padding: 5px; border-radius: 5px; text-align: center; font-size: 0.9em;">
-                    <span><i class="fas fa-exclamation-triangle"></i> Please note: Contact your local admin to obtain a room link for marking machine status.</span>
-                </p>
-                <a href="/" class="btn btn-primary mt-3">Go Back Home</a>
+
+                <div class="my-5 mx-3">
+                    {% include 'includes/link-info.html' %}
+                </div>
+
+                <a href="/">
+                    <button class="home-button">
+                        <i class="fas fa-home" style="margin-right: 8px;"></i> Go back to Home
+                    </button>
+                </a>
             </div>
         </div>
     </div>

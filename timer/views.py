@@ -67,7 +67,7 @@ def set_timer(request, building, machine_id):
             return JsonResponse({'status': 'success'})
         return JsonResponse({'status': 'error', 'message': 'Machine is not available'}, status=400)
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
 
 @csrf_exempt
 def available(request, building, machine_id):
@@ -83,7 +83,7 @@ def available(request, building, machine_id):
         else:
             return JsonResponse({'status': 'error', 'message': 'Machine is not finished'}, status=400)
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
 
 @csrf_exempt
 def get_notes(request, building, machine_id):
@@ -95,7 +95,7 @@ def get_notes(request, building, machine_id):
 
         return JsonResponse({'status': 'success', 'notes': machine.get_notes()})
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
 
 @csrf_exempt
 def set_defect(request, building, machine_id):
@@ -111,7 +111,7 @@ def set_defect(request, building, machine_id):
 
         return JsonResponse({'status': 'success'})
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
 
 @csrf_exempt
 def set_repair(request, building, machine_id):
@@ -125,7 +125,7 @@ def set_repair(request, building, machine_id):
         machine.set_notes('')
         return JsonResponse({'status': 'success'})
 
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=400)
+    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
 
 
 def page_not_found(request, exception):

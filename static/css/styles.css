@@ -99,6 +99,84 @@ h1 {
     font-weight: bold;
 }
 
+/* home page round github link button */
+.round-button {
+    background-color: #243a60;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.round-button:hover {
+    background-color: #c75333;
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.round-button:active {
+    background-color: #d44020;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.round-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px #fac375;
+}
+
+/* home button */
+.home-button {
+    background-color: #079c93; /* Hauptfarbe */
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.home-button:hover {
+    background-color: #ff640e; /* Hover-Farbe */
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.home-button:active {
+    background-color: #490815; /* Active-Farbe */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.home-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px #018286; /* Focus-Farbe */
+}
+
+/* home page shadow effect */
+.custom-hover:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
+}
+
+.warning-message {
+    background-color: rgb(220, 170, 31);
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 0.9em;
+    border: 2px dotted black;
+    color: black;
+}
 
 /* Extra small devices (phones, up to 360px) */
 @media (max-width: 360px) {
