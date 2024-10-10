@@ -35,7 +35,7 @@ footer {
     cursor: pointer;
 }
 .machine-button.off {
-    background-color: #1c6d2e; /* Green color for available machines */
+    background-color: #6d6e53; /* Green color for available machines */
     color: white; /* White text for better contrast */
     font-weight: bold;
 }
@@ -43,11 +43,11 @@ footer {
     background-color: #baefba; /* Muted grey for finished machines */
 }
 .machine-button.running {
-    background-color: #F4D03F; /* Softer yellow for running machines */
-    box-shadow: 0 0 10px 2px #F4D03F;
+    background-color: #f37933; /* Softer yellow for running machines */
+    box-shadow: 0 0 20px 2px #f37933;
 }
 .machine-button.defect {
-    background-color: #d3d3d3; /* Light grey for defect machines */
+    background-color: #dc3545; /* Light grey for defect machines */
     color: #a9a9a9; /* Dark grey text */
     cursor: not-allowed; /* Change cursor to indicate non-interactive */
 }
