@@ -12,7 +12,7 @@ class Building(models.Model):
     name = models.CharField(max_length=100)
 
     def get_name(self):
-        return self.name
+        return f"{self.name.lower()}"
 
 
 # Create your models here.
