@@ -21,12 +21,12 @@ register_converter(UUIDConverter, 'uuid')
 handler404 = page_not_found
 
 urlpatterns = [
-    path('building/<uuid:building>/', index),
-    path('building/<uuid:building>/laundry/<uuid:machine_id>/', set_timer, name='set_timer'),
-    path('building/<uuid:building>/laundry/<uuid:machine_id>/available/', available, name='available'),
-    path('building/<uuid:building>/laundry/<uuid:machine_id>/notes/', get_notes, name='get_notes'),
-    path('building/<uuid:building>/laundry/<uuid:machine_id>/defect/', set_defect, name='set_defect'),
-    path('building/<uuid:building>/laundry/<uuid:machine_id>/repair/', set_repair, name='set_repair'),
+    path('<uuid:building>/', index),
+    path('<uuid:building>/laundry/<uuid:machine_id>/', set_timer, name='set_timer'),
+    path('<uuid:building>/laundry/<uuid:machine_id>/available/', available, name='available'),
+    path('<uuid:building>/laundry/<uuid:machine_id>/notes/', get_notes, name='get_notes'),
+    path('<uuid:building>/laundry/<uuid:machine_id>/defect/', set_defect, name='set_defect'),
+    path('<uuid:building>/laundry/<uuid:machine_id>/repair/', set_repair, name='set_repair'),
     path('404', lambda request: page_not_found(request, None), name='404'),
     path('', homepage, name='homepage'),
 ]

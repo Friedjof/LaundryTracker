@@ -63,6 +63,8 @@
                         data-bs-target="#timerModal"
                         data-machine-id="{{ machine.identifier }}"
                         data-machine-status="{{ machine.machine_status }}"
+                        data-machine-type="{{ machine.machine_type }}"
+                        data-machine-number="{{ machine.number }}"
                         style="
                             border-radius: 50%;
                             width: 100px;
@@ -128,10 +130,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="timerModalLabel">Set Timer</h5>
+                    <h5 class="modal-title" id="timerModalLabel">Start Timer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <span class="badge bg-danger" id="defectBadge">sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</span>
                     <!-- Timer Form -->
                     <form id="timerForm" method="POST">
                         {% csrf_token %}
@@ -146,8 +149,8 @@
                         <!-- Defect Form -->
                         <form id="defectForm" method="POST" style="display: none; margin-top: 10px;">
                             {% csrf_token %}
-                            <label for="isDefectNote">Enter a short note about the defect:</label>
-                            <input type="text" id="isDefectNote" name="isDefectNote" class="form-control" placeholder="Enter defect note">
+                            <label for="isDefectNote" id="isDefectNoteLabel">Enter a short note about the defect:</label>
+                            <input type="text" id="isDefectNote" name="isDefectNote" class="form-control" placeholder="Enter defect note (optional but recommended)" maxlength="59">
                             <input type="hidden" id="machineId" name="machineId">
 
                             <div class="d-flex justify-content-center align-items-center mt-3">

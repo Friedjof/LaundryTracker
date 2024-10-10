@@ -8,6 +8,52 @@ document.addEventListener('DOMContentLoaded', function () {
             const button = event.relatedTarget;
             const machineId = button.getAttribute('data-machine-id');
             const machineStatus = button.getAttribute('data-machine-status');
+            const machineNumber = button.getAttribute('data-machine-number');
+            const machineType = button.getAttribute('data-machine-type');
+            const machineNotes = button.getAttribute('data-machine-notes');
+
+            const timerModalLabel = document.getElementById('timerModalLabel');
+            if (timerModalLabel) {
+                if (machineStatus === 'A' || machineStatus === 'F') {
+                    timerModalLabel.innerText = `Start machine ${machineNumber} (${getMachineTypeDisplay(machineType)})`;
+                } else if (machineStatus === 'R') {
+                    timerModalLabel.innerText = `Machine ${machineNumber} (${getMachineTypeDisplay(machineType)}) is already running`;
+                } else if (machineStatus === 'D') {
+                    timerModalLabel.innerText = `Machine ${machineNumber} (${getMachineTypeDisplay(machineType)}) is defect`;
+                } else {
+                    timerModalLabel.innerText = `Machine ${machineNumber} (${getMachineTypeDisplay(machineType)})`;
+                }
+            }
+
+            const defectBadge = document.getElementById('defectBadge');
+            if (defectBadge) {
+                defectBadge.style.display = machineStatus === 'D' ? 'block' : 'none';
+
+                if (machineStatus === 'D') {
+                    defectBadge.innerText = machineNotes === null || machineNotes === '' ? 'Defect: no notes' : `Defect: ${machineNotes}`;
+                }
+            }
+
+            const defectLink = document.getElementById('defectLink');
+            const isDefectNote = document.getElementById('isDefectNote');
+            const isDefectNoteLabel = document.getElementById('isDefectNoteLabel');
+            if (defectLink && isDefectNote && isDefectNoteLabel) {
+                if (machineStatus === 'D') {
+                    defectLink.innerText = 'Machine is not defect?';
+                    defectLink.style.color = 'green';
+
+                    // hide defect note
+                    isDefectNote.style.display = 'none';
+                    isDefectNoteLabel.style.display = 'none';
+                } else {
+                    defectLink.innerText = 'Machine is defect?';
+                    defectLink.style.color = 'red';
+
+                    // show defect note
+                    isDefectNote.style.display = 'block';
+                    isDefectNoteLabel.style.display = 'block';
+                }
+            }
 
             const modalBodyInput = document.getElementById('machineId');
             if (modalBodyInput) {
@@ -54,38 +100,30 @@ document.addEventListener('DOMContentLoaded', function () {
             const timerModal = document.getElementById('timerModal');
             const machineId = document.getElementById('machineId').value;
             const timerDuration = document.getElementById('timerDuration').value;
-            const buildingElement = document.getElementById('building_id');
-            const csrfToken = document.getElementById('csrfToken').value;
 
-            if (buildingElement) {
-                const building = buildingElement.value;
+            const formData = new FormData();
+            formData.append('timerDuration', timerDuration);
+            formData.append('machineId', machineId);
 
-                const formData = new FormData();
-                formData.append('timerDuration', timerDuration);
-                formData.append('machineId', machineId);
-
-                fetch(`/building/${building}/laundry/${machineId}/`, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRFToken': csrfToken
+            fetch(`/${buildingId}/laundry/${machineId}/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateMachineStatus();
+                    const modalInstance = bootstrap.Modal.getInstance(timerModal);
+                    if (modalInstance) {
+                        modalInstance.hide();
                     }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        updateMachineStatus();
-                        const modalInstance = bootstrap.Modal.getInstance(timerModal);
-                        if (modalInstance) {
-                            modalInstance.hide();
-                        }
-                    } else {
-                        alert('Failed to start machine');
-                    }
-                });
-            } else {
-                console.error('Building ID element not found');
-            }
+                } else {
+                    alert('Failed to start machine');
+                }
+            });
         });
     }
 
@@ -103,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
             formData.append('machineId', machineId);
             formData.append('notes', isDefectNote);
 
-            fetch(`/building/${buildingId}/laundry/${machineId}/defect/`, {
+            fetch(`/${buildingId}/laundry/${machineId}/defect/`, {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -131,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
             const machineId = document.getElementById('machineId').value;
 
-            fetch(`/building/${buildingId}/laundry/${machineId}/repair/`, {
+            fetch(`/${buildingId}/laundry/${machineId}/repair/`, {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrfToken
@@ -158,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const machineId = this.getAttribute('data-machine-id');
 
             if (buildingId) {
-                fetch(`/building/${buildingId}/laundry/${machineId}/available/`, {
+                fetch(`/${buildingId}/laundry/${machineId}/available/`, {
                     method: 'POST',
                     headers: {
                         'X-CSRFToken': csrfToken
@@ -189,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function updateMachineStatus() {
-        fetch(`/building/${buildingId}/`, {
+        fetch(`/${buildingId}/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': csrfToken,
@@ -228,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // border color
                 const machineHeader = document.getElementById(`header-${machine.identifier}`);
                 if (machineHeader) {
-                    machineHeader.classList.remove('border-success', 'border-warning', 'border-primary', 'border-danger');
+                    machineHeader.classList.remove('off', 'running', 'on', 'defect');
                     machineHeader.classList.add(getMachineClass(machine.machine_status));
                 } else {
                     console.error(`Element with ID header-${machine.identifier} not found`);
@@ -243,6 +281,13 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         })
         .catch(error => console.error('Error:', error));
+    }
+
+    // Helper function to get the machine type display
+    function getMachineTypeDisplay(type) {
+        if (type === 'W') return 'Washer';
+        if (type === 'D') return 'Dryer';
+        return '';
     }
 
     // Helper function to get the CSS class for machine status
@@ -291,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // get notes with fetch
     function getNotes(machineId) {
         var notes = "";
-        fetch(`/building/${buildingId}/laundry/${machineId}/notes/`, {
+        fetch(`/${buildingId}/laundry/${machineId}/notes/`, {
             method: 'GET',
             headers: {
                 'X-CSRFToken': csrfToken

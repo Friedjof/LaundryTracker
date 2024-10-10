@@ -19,8 +19,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback_secret_key')
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DJANGO_DEBUG', 'true').lower() == 'true'
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
+
+# Required for reverse proxy
+
+ALLOWED_HOSTS.append('0.0.0.0')
+
+# Security settings
+
+SECURE_BROWSER_XSS_FILTER = True
+tls_active = os.getenv('TLS_ACTIVE', 'true').lower() == 'true'
+protocol = 'https' if tls_active else 'http'
+
+CSRF_TRUSTED_ORIGINS = [f'{protocol}://{host}' for host in ALLOWED_HOSTS if host]
+CORS_ORIGIN_WHITELIST = [f'{protocol}://{host}' for host in ALLOWED_HOSTS if host]
 
 # Application definition
 
