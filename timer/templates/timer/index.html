@@ -89,6 +89,8 @@
                         data-machine-status="{{ machine.machine_status }}"
                         data-machine-type="{{ machine.machine_type }}"
                         data-machine-number="{{ machine.number }}"
+                        data-machine-notes="{{ machine.notes }}"
+                        title="{% if machine.machine_status == 'A' %}Click here to start{% elif machine.machine_status == 'F' %}This machine has finished{% elif machine.machine_status == 'D' %}Machine is defect: {{ machine.notes }}{% endif %}"
                         style="
                             border-radius: 50%;
                             width: 100px;
@@ -155,8 +157,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <span class="badge bg-danger" id="defectBadge">sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</span>
-                    <!-- Timer Form -->
+                    <span class="badge bg-danger" id="defectBadge">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span>                    <!-- Timer Form -->
                     <form id="timerForm" method="POST">
                         {% csrf_token %}
                         <label for="timerDuration">Enter timer duration (in minutes):</label>
