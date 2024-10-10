@@ -39,14 +39,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const isDefectNoteLabel = document.getElementById('isDefectNoteLabel');
             if (defectLink && isDefectNote && isDefectNoteLabel) {
                 if (machineStatus === 'D') {
-                    defectLink.innerText = 'Machine is not defect?';
+                    defectLink.innerText = `${getMachineTypeDisplay(machineType)} is defect`;
                     defectLink.style.color = 'green';
 
                     // hide defect note
                     isDefectNote.style.display = 'none';
                     isDefectNoteLabel.style.display = 'none';
                 } else {
-                    defectLink.innerText = 'Machine is defect?';
+                    defectLink.innerText = `${getMachineTypeDisplay(machineType)} is defect?`;
                     defectLink.style.color = 'red';
 
                     // show defect note
