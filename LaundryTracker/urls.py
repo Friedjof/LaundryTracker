@@ -19,6 +19,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# this import is required to overwrite the default 404 handler
+from timer.views import page_not_found
+
+handler404 = page_not_found
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
