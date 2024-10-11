@@ -49,7 +49,6 @@ def index(request, building):
         )
 
 
-@csrf_exempt
 def set_timer(request, building, machine_id):
     if request.method == 'POST':
         machine = Machine.objects.get(identifier=machine_id)
@@ -69,7 +68,6 @@ def set_timer(request, building, machine_id):
 
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
 
-@csrf_exempt
 def available(request, building, machine_id):
     if request.method == 'POST':
         try:
@@ -85,7 +83,6 @@ def available(request, building, machine_id):
 
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
 
-@csrf_exempt
 def get_notes(request, building, machine_id):
     if request.method == 'POST':
         try:
@@ -97,7 +94,6 @@ def get_notes(request, building, machine_id):
 
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
 
-@csrf_exempt
 def set_defect(request, building, machine_id):
     if request.method == 'POST':
         try:
@@ -117,7 +113,6 @@ def set_defect(request, building, machine_id):
 
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
 
-@csrf_exempt
 def set_repair(request, building, machine_id):
     if request.method == 'POST':
         try:
