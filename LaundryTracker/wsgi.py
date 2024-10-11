@@ -14,6 +14,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LaundryTracker.settings')
 
 # Import and run the command
 from django.core.management import call_command
-call_command('clear_old_tasks')
+
+try:
+    call_command('clear_old_tasks')
+except Exception as e:
+    print(e)
+    print('Failed to clear old tasks')
 
 application = get_wsgi_application()
