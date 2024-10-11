@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.conf import settings
+from django.utils.html import format_html
 
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
@@ -15,7 +17,15 @@ class BuildingResource(resources.ModelResource):
 @admin.register(Building)
 class BuildingAdmin(ImportExportModelAdmin):
     resource_class = BuildingResource
-    list_display = ('identifier', 'name')
+    list_display = ('identifier', 'name', 'building_link')
+
+    def building_link(self, obj):
+        protocol = 'https' if settings.TLS_ACTIVE else 'http'
+        domain = settings.ALLOWED_HOSTS[0] if settings.ALLOWED_HOSTS else 'localhost'
+        url = f"{protocol}://{domain}/{obj.identifier}"
+        return format_html('<a href="{}">{}</a>', url, url)
+
+    building_link.short_description = 'Building Link'
 
 
 class MachineResource(resources.ModelResource):

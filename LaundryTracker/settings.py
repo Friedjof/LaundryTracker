@@ -29,8 +29,8 @@ ALLOWED_HOSTS.append('0.0.0.0')
 # Security settings
 
 SECURE_BROWSER_XSS_FILTER = True
-tls_active = os.getenv('TLS_ACTIVE', 'true').lower() == 'true'
-protocol = 'https' if tls_active else 'http'
+TLS_ACTIVE = os.getenv('TLS_ACTIVE', 'true').lower() == 'true'
+protocol = 'https' if TLS_ACTIVE else 'http'
 
 CSRF_TRUSTED_ORIGINS = [f'{protocol}://{host}' for host in ALLOWED_HOSTS if host]
 CORS_ORIGIN_WHITELIST = [f'{protocol}://{host}' for host in ALLOWED_HOSTS if host]

@@ -14,6 +14,9 @@ class Building(models.Model):
     def get_name(self):
         return f"{self.name}"
 
+    def __str__(self):
+        return self.get_name()
+
 
 # Create your models here.
 class Machine(models.Model):
@@ -75,7 +78,7 @@ class Machine(models.Model):
 
     def set_available(self):
         self.machine_status = 'A'
-        self.timer_start = datetime.now()
+        self.timer_start = timezone.now()
         self.save()
 
     def _get_building_display(self):
@@ -102,3 +105,10 @@ class Machine(models.Model):
 
     def __str__(self):
         return f'{self.get_machine_type_display()} ({self.number}) ({self._get_building_display()})'
+
+    def __repr__(self):
+        return f'{self.get_machine_type_display()} ({self.number}) ({self._get_building_display()})'
+
+    class Meta:
+        unique_together = ['building', 'number']
+        ordering = ['building', 'number']
