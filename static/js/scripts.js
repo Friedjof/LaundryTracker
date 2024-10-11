@@ -127,18 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    const emailSubscriptionLink = document.getElementById('emailSubscriptionLink');
-    const emailSubscriptionForm = document.getElementById('emailSubscriptionForm');
-
-    emailSubscriptionLink.addEventListener('click', function(event) {
-        event.preventDefault();
-        if (emailSubscriptionForm.style.display === 'none' || emailSubscriptionForm.style.display === '') {
-            emailSubscriptionForm.style.display = 'block';
-        } else {
-            emailSubscriptionForm.style.display = 'none';
-        }
-    });
-
     const setDefectBtn = document.getElementById('setDefectBtn');
     const repairBtn = document.getElementById('repairBtn');
 
