@@ -18,7 +18,6 @@ from django.core.management import call_command
 try:
     call_command('clear_old_tasks')
 except Exception as e:
-    print(e)
-    print('Failed to clear old tasks')
+    print(f'Error while clearing old tasks: {e}')
 
 application = get_wsgi_application()

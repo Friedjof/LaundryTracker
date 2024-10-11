@@ -30,7 +30,7 @@ def index(request, building):
                 'machine_type_display': machine.get_machine_type_display(),
                 'machine_status': machine.machine_status,
                 'remaining_time': machine.remaining_time(),
-                'end_time': timezone.localtime(machine.end_time()).strftime('%H:%M'),
+                'end_time': timezone.localtime(machine.end_time()).strftime('%a, %d %b %H:%M'),
                 'notes': machine.get_notes(),
                 'notes_date': timezone.localtime(machine.notes_date).strftime('%d.%m.%Y %H:%M')
             })

@@ -318,9 +318,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Helper function to get the end time or last used text
     function getEndTimeText(status, endTime) {
-        if (status === 'F') return `Finished at: ${endTime}`;
-        if (status === 'R') return `End time: ${endTime}`;
-        return `Last used: ${endTime}`;
+        if (status === 'F') return `Finished at:<br>${endTime}`;
+        if (status === 'R') return `End time:<br>${endTime}`;
+        return `Last used:<br>${endTime}`;
     }
 
     // Helper function to get the correct machine title

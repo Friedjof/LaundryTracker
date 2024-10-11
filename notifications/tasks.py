@@ -2,7 +2,7 @@ import asyncio
 
 import django.db.utils
 from background_task import background
-from telegram import Bot
+import telegram
 
 from .models import TelegramChannel
 from timer.models import Machine, Building
@@ -15,7 +15,10 @@ MESSAGES = {
 
 
 async def send_update_notification(bot_token, chat_id, message):
-    await Bot(token=bot_token).send_message(chat_id=chat_id, text=message)
+    try:
+        await telegram.Bot(token=bot_token).send_message(chat_id=chat_id, text=message)
+    except telegram.error.BadRequest as e:
+        print(f'Error sending message: {e}')
 
 
 def send_machine_available_notification(building: Building, machine: Machine):

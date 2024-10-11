@@ -131,11 +131,11 @@
                     <div class="machine-button-label text-center mt-2" id="end-time-{{ machine.identifier }}">
                         <i>
                             {% if machine.machine_status == 'F' %}
-                                Finished at: {{ machine.end_time|date:"H:i" }}
+                                Finished at:<br>{{ machine.end_time|date:"D, d M H:i" }}
                             {% elif machine.machine_status == 'R' %}
-                                End time: {{ machine.end_time|date:"H:i" }}
+                                End time:<br>{{ machine.end_time|date:"D, d M H:i" }}
                             {% else %}
-                                Last used: {{ machine.end_time|date:"H:i" }}
+                                Last used:<br>{{ machine.end_time|date:"D, d M H:i" }}
                             {% endif %}
                         </i>
                     </div>

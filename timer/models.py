@@ -7,18 +7,6 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
-class Building(models.Model):
-    identifier = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
-
-    name = models.CharField(max_length=100)
-
-    def get_name(self):
-        return f"{self.name}"
-
-    def __str__(self):
-        return self.get_name()
-
-
 # This function returns the default building if it exists, otherwise it creates a dummy building
 def get_default_building():
     if Building.objects.exists():
@@ -32,6 +20,18 @@ def get_default_machine_number():
         return Machine.objects.last().number + 1
     else:
         return 1
+
+
+class Building(models.Model):
+    identifier = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
+
+    name = models.CharField(max_length=100)
+
+    def get_name(self):
+        return f"{self.name}"
+
+    def __str__(self):
+        return self.get_name()
 
 
 # Create your models here.
@@ -70,11 +70,6 @@ class Machine(models.Model):
         self.machine_status = 'R'
         self.save()
 
-    def stop_timer(self):
-        self.timer_start = None
-        self.machine_status = 'F'
-        self.save()
-
     def remaining_time(self) -> int:
         if self.timer_start is None:
             return 0
@@ -90,6 +85,7 @@ class Machine(models.Model):
     def update(self) -> bool:
         if self.machine_status == 'R' and self.remaining_time() == 0:
             self.machine_status = 'F'
+            self.timer = 0
             self.save()
 
             return True
@@ -99,6 +95,7 @@ class Machine(models.Model):
         if self.machine_status != 'A':
             self.machine_status = 'A'
             self.timer_start = timezone.now()
+            self.timer = 0
             self.save()
 
             return True
@@ -120,6 +117,7 @@ class Machine(models.Model):
 
     def set_defect(self):
         self.machine_status = 'D'
+        self.timer = 0
         self.save()
 
     @staticmethod
@@ -135,3 +133,15 @@ class Machine(models.Model):
     class Meta:
         unique_together = ['building', 'number']
         ordering = ['building', 'number']
+
+
+class BuildingAssignment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    building = models.ForeignKey(Building, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user} for {self.building}'
+
+    class Meta:
+        unique_together = ['user', 'building']
+        ordering = ['user', 'building']
