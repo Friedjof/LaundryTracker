@@ -70,13 +70,13 @@ To set up and run the LaundryTracker application using Docker and Docker Compose
 
 Create a `.env` file in the root directory of your project with the following content:
 ```env
-DJANGO_SECRET_KEY='<random-django-secret-string>'
-DJANGO_DEBUG='False'
-DJANGO_ALLOWED_HOSTS='localhost,your-domain.com'
-DJANGO_SUPERUSER_USERNAME='admin'
-DJANGO_SUPERUSER_EMAIL='<admin-email>'
-DJANGO_SUPERUSER_PASSWORD='<admin-password>'
-TLS_ACTIVE='True'
+DJANGO_SECRET_KEY='<random-django-secret-string>' # generate a random string for the secret key
+DJANGO_DEBUG='False'                              # set to 'True' for development
+DJANGO_ALLOWED_HOSTS='your-domain.com,localhost'  # this first should be your main domain, multiple domains should be separated by commas
+DJANGO_SUPERUSER_USERNAME='admin'                 # this is the default superuser username
+DJANGO_SUPERUSER_EMAIL='<admin-email>'            # this is the default superuser email
+DJANGO_SUPERUSER_PASSWORD='<admin-password>'      # this is the default superuser password
+TLS_ACTIVE='True'                                 # set to 'False' if you don't want to use HTTPS
 ```
 
 ### Build and Run the Docker Container
