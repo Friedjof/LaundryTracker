@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'import_export',
 
     'timer',
+    'notifications',
 ]
 
 MIDDLEWARE = [
