@@ -10,6 +10,11 @@ python manage.py migrate --noinput
 # Collect static files
 python manage.py collectstatic --noinput
 
+# Create cron job for background tasks
+echo "Creating cron job for background tasks..."
+python manage.py crontab add
+python manage.py crontab show
+
 # Create superuser if DJANGO_SUPERUSER_USERNAME is set and the user does not already exist
 if [ "$DJANGO_SUPERUSER_USERNAME" ]; then
   echo "Checking if superuser exists..."
