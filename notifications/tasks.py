@@ -1,7 +1,6 @@
 import asyncio
 
 import django.db.utils
-from background_task import background
 import telegram
 
 from .models import TelegramChannel
@@ -37,19 +36,3 @@ def send_machine_finished_notification(building: Building, machine: Machine):
                 machine_number=machine.number, building_name=building.name, machine_type=machine.get_machine_type_display()
             )
         ))
-
-
-@background(schedule=5)
-def update_machine_status():
-    machines = Machine.objects.filter(machine_status='R')
-    for machine in machines:
-        if machine.update(): # if machine was updated
-            # trigger notification
-            send_machine_finished_notification(machine.building, machine)
-
-
-# hint from https://github.com/django-background-tasks/django-background-tasks/issues/205
-try:
-    update_machine_status(repeat=5, repeat_until=None)
-except django.db.utils.OperationalError:
-    print('Database not ready yet')

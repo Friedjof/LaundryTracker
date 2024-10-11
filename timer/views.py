@@ -23,7 +23,10 @@ def index(request, building):
         machines = Machine.objects.filter(building=building)
         machines_data = []
 
+        # Update all machines
         for machine in machines:
+            machine.update()
+
             machines_data.append({
                 'identifier': str(machine.identifier),
                 'number': int(machine.number),
@@ -40,6 +43,11 @@ def index(request, building):
     else:
         # GET-Request: Seite mit Maschinenliste zurückgeben
         machines = Machine.objects.filter(building=building)
+
+        # Update all machines
+        for machine in machines:
+            machine.update()
+
         return render(
             request, 'timer/index.html',
             {

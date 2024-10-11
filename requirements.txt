@@ -2,7 +2,6 @@ amqp==5.2.0
 anyio==4.6.0
 asgiref==3.8.1
 billiard==4.2.1
-celery==5.4.0
 certifi==2024.8.30
 charset-normalizer==3.4.0
 click==8.1.7
@@ -12,9 +11,6 @@ click-repl==0.3.0
 cron-descriptor==1.4.5
 diff-match-patch==20230430
 Django==5.1.1
-django-background-tasks==1.2.8
-django-celery-beat==2.7.0
-django-cron==0.6.0
 django-import-export==4.1.1
 django-timezone-field==7.0
 gunicorn==23.0.0

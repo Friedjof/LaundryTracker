@@ -46,6 +46,8 @@ class Machine(models.Model):
         ('R', 'Running'),
         ('F', 'Finished'),
         ('D', 'Defect'),
+        ('B', 'Blinking'),
+        ('U', 'Unknown'),
     ]
 
     identifier = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
