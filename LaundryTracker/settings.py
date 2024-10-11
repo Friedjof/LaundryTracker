@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_crontab',
     'background_task',
     'import_export',
 
@@ -84,6 +85,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'LaundryTracker.wsgi.application'
 
+## Crontab settings
+CRONJOBS = [
+    ('* * * * *', 'notifications.management.commands.clear_old_tasks'), # cler old tasks every minute in the database
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
