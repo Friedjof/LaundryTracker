@@ -18,6 +18,21 @@ class Building(models.Model):
         return self.get_name()
 
 
+# This function returns the default building if it exists, otherwise it creates a dummy building
+def get_default_building():
+    if Building.objects.exists():
+        return Building.objects.first()
+    else:
+        # Erstelle ein Dummy-Gebäude, falls keines existiert
+        return Building.objects.create(name='Default Building')
+
+def get_default_machine_number():
+    if Machine.objects.exists():
+        return Machine.objects.last().number + 1
+    else:
+        return 1
+
+
 # Create your models here.
 class Machine(models.Model):
     MACHINE_TYPE = [
@@ -34,9 +49,9 @@ class Machine(models.Model):
 
     identifier = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
 
-    building = models.ForeignKey(Building, on_delete=models.CASCADE)
+    building = models.ForeignKey(Building, on_delete=models.CASCADE, default=get_default_building)
 
-    number = models.PositiveIntegerField()
+    number = models.PositiveIntegerField(default=get_default_machine_number)
 
     machine_type = models.CharField(max_length=1, choices=MACHINE_TYPE)
     machine_status = models.CharField(max_length=1, choices=MACHINE_STATUS, default='A')
