@@ -86,8 +86,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'LaundryTracker.wsgi.application'
 
 ## Crontab settings
-CRONJOBS = [
-    ('* * * * *', 'notifications.management.commands.clear_old_tasks'), # cler old tasks every minute in the database
+CRON_CLASSES = [
+    'notifications.cron.ClearBackgroundTasksCronJob',
 ]
 
 # Database

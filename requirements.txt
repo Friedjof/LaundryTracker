@@ -14,7 +14,7 @@ diff-match-patch==20230430
 Django==5.1.1
 django-background-tasks==1.2.8
 django-celery-beat==2.7.0
-django-crontab==0.7.1
+django-cron==0.6.0
 django-import-export==4.1.1
 django-timezone-field==7.0
 gunicorn==23.0.0
