@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .admin import BuildingAdmin
 from .models import Machine, Building
 
+from notifications.tasks import send_machine_available_notification
+
 
 def index(request, building):
     try:
@@ -79,6 +81,10 @@ def available(request, building, machine_id):
 
         if machine.machine_status == 'F':
             machine.set_available()
+
+            # trigger notification
+            send_machine_available_notification(machine.building, machine)
+
             return JsonResponse({'status': 'success'})
         else:
             return JsonResponse({'status': 'error', 'message': 'Machine is not finished'}, status=400)
@@ -126,6 +132,10 @@ def set_repair(request, building, machine_id):
             return JsonResponse({'status': 'error', 'message': 'Invalid machine or building'}, status=400)
 
         machine.set_available()
+
+        # trigger notification
+        send_machine_available_notification(machine.building, machine)
+
         machine.set_notes('')
         return JsonResponse({'status': 'success'})
 

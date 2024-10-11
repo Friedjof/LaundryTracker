@@ -2,6 +2,7 @@ from datetime import datetime
 import uuid
 
 from django.db import models
+from django.contrib.auth.models import User
 
 from django.utils import timezone
 
@@ -77,8 +78,8 @@ class Machine(models.Model):
     def remaining_time(self) -> int:
         if self.timer_start is None:
             return 0
-        elapsed = timezone.now() - self.timer_start
-        remaining = self.timer - elapsed.total_seconds() // 60
+
+        remaining = self.timer - (timezone.now() - self.timer_start).total_seconds() // 60
         if remaining < 0:
             return 0
         return int(remaining)
@@ -86,15 +87,22 @@ class Machine(models.Model):
     def end_time(self) -> datetime:
         return self.timer_start + timezone.timedelta(minutes=self.timer)
 
-    def update(self):
+    def update(self) -> bool:
         if self.machine_status == 'R' and self.remaining_time() == 0:
             self.machine_status = 'F'
             self.save()
 
-    def set_available(self):
-        self.machine_status = 'A'
-        self.timer_start = timezone.now()
-        self.save()
+            return True
+        return False
+
+    def set_available(self) -> bool:
+        if self.machine_status != 'A':
+            self.machine_status = 'A'
+            self.timer_start = timezone.now()
+            self.save()
+
+            return True
+        return False
 
     def _get_building_display(self):
         return self.building.get_name()

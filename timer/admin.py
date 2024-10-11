@@ -42,3 +42,16 @@ class MachineResource(resources.ModelResource):
 class MachineAdmin(ImportExportModelAdmin):
     resource_class = MachineResource
     list_display = ('number', 'building', 'machine_type', 'machine_status', 'timer', 'timer_start', 'notes', 'notes_date')
+    list_filter = ('building', 'machine_type', 'machine_status')
+    search_fields = ('number', 'building__name', 'machine_type')
+    ordering = ('number',)
+    readonly_fields = ('timer_start',)
+    fieldsets = (
+        (None, {
+            'fields': ('number', 'building', 'machine_type', 'machine_status')
+        }),
+        ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('timer', 'timer_start', 'notes', 'notes_date'),
+        }),
+    )
