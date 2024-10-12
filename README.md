@@ -25,7 +25,7 @@ To get started with LaundryTracker, follow the steps below to set up the project
 - Django 3.x or higher
 - Redis (if using Celery for background tasks)
 
-### Setup
+### Setup development environment
 
 1. **Clone the repository:**
    ```bash
@@ -56,7 +56,7 @@ To get started with LaundryTracker, follow the steps below to set up the project
 
 6. **Run background tasks:**
    ```bash
-   python manage.py process_tasks
+   python manage.py simulate_cron --interval 10
    ```
 
 7. **Access the application:**
