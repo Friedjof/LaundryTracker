@@ -12,6 +12,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
+    cron \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the requirements file and install dependencies
@@ -27,6 +28,14 @@ VOLUME ["/data"]
 
 # Set environment variable for database path
 ENV SQLITE_PATH=/data/db.sqlite3
+
+# Setup cron job
+COPY cron/update /etc/cron.d/update
+RUN chmod 0644 /etc/cron.d/update
+# Apply cron job
+RUN crontab /etc/cron.d/update
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
 
 # Make the start.sh script executable
 RUN chmod +x /app/start.sh

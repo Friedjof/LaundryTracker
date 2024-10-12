@@ -20,19 +20,19 @@ async def send_update_notification(bot_token, chat_id, message):
         print(f'Error sending message: {e}')
 
 
-def send_machine_available_notification(building: Building, machine: Machine):
-    for channel in TelegramChannel.objects.filter(building=building):
+def send_machine_available_notification(machine: Machine):
+    for channel in TelegramChannel.objects.filter(building=machine.building):
         asyncio.run(send_update_notification(
             channel.telegram_bot.token, channel.chat_id, MESSAGES['available'].format(
-                machine_number=machine.number, building_name=building.name, machine_type=machine.get_machine_type_display()
+                machine_number=machine.number, building_name=machine.building.name, machine_type=machine.get_machine_type_display()
             )
         ))
 
 
-def send_machine_finished_notification(building: Building, machine: Machine):
-    for channel in TelegramChannel.objects.filter(building=building):
+def send_machine_finished_notification(machine: Machine):
+    for channel in TelegramChannel.objects.filter(building=machine.building):
         asyncio.run(send_update_notification(
             channel.telegram_bot.token, channel.chat_id, MESSAGES['finished'].format(
-                machine_number=machine.number, building_name=building.name, machine_type=machine.get_machine_type_display()
+                machine_number=machine.number, building_name=machine.building.name, machine_type=machine.get_machine_type_display()
             )
         ))

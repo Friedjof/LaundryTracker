@@ -4,12 +4,10 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 
-from .admin import BuildingAdmin
 from .models import Machine, Building
 
-from notifications.tasks import send_machine_available_notification
+from notifications.tasks import send_machine_available_notification, send_machine_finished_notification
 
 
 def index(request, building):
@@ -25,8 +23,6 @@ def index(request, building):
 
         # Update all machines
         for machine in machines:
-            machine.update()
-
             machines_data.append({
                 'identifier': str(machine.identifier),
                 'number': int(machine.number),
@@ -44,10 +40,6 @@ def index(request, building):
         # GET-Request: Seite mit Maschinenliste zurückgeben
         machines = Machine.objects.filter(building=building)
 
-        # Update all machines
-        for machine in machines:
-            machine.update()
-
         return render(
             request, 'timer/index.html',
             {
@@ -57,7 +49,6 @@ def index(request, building):
                 'year': datetime.now().year
             }
         )
-
 
 def set_timer(request, building, machine_id):
     if request.method == 'POST':
@@ -89,7 +80,7 @@ def available(request, building, machine_id):
             machine.set_available()
 
             # trigger notification
-            send_machine_available_notification(machine.building, machine)
+            send_machine_available_notification(machine)
 
             return JsonResponse({'status': 'success'})
         else:
@@ -137,13 +128,12 @@ def set_repair(request, building, machine_id):
         machine.set_available()
 
         # trigger notification
-        send_machine_available_notification(machine.building, machine)
+        send_machine_available_notification(machine)
 
         machine.set_notes('')
         return JsonResponse({'status': 'success'})
 
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
-
 
 def page_not_found(request, exception):
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)

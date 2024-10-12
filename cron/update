@@ -1,0 +1,2 @@
+# update (Crontab-File)
+* * * * * root python /app/manage.py update >> /var/log/cron.log 2>&1

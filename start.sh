@@ -19,6 +19,13 @@ if [ "$DJANGO_SUPERUSER_USERNAME" ]; then
   fi
 fi
 
+# Apply the cron job
+crontab /etc/cron.d/update
+
+# Start the cron service
+echo "Starting cron service..."
+cron
+
 # Start Gunicorn server for production
 echo "Starting Gunicorn server..."
 gunicorn LaundryTracker.wsgi:application --bind 0.0.0.0:8000 --workers 2
