@@ -136,6 +136,7 @@ if DEBUG:
     STATICFILES_DIRS = [
         BASE_DIR / 'static',
     ]
+    STATIC_ROOT = BASE_DIR / 'staticfiles'
 else:
     STATICFILES_DIRS = []
     STATIC_ROOT = BASE_DIR / 'static'

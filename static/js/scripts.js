@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     timerModalLabel.innerText = `Machine ${machineNumber} (${getMachineTypeDisplay(machineType)}) is already running`;
                 } else if (machineStatus === 'D') {
                     timerModalLabel.innerText = `Machine ${machineNumber} (${getMachineTypeDisplay(machineType)}) is defect`;
+                } else if (machineStatus === 'B') {
+                    timerModalLabel.innerText = `Machine ${machineNumber} (${getMachineTypeDisplay(machineType)}) is blinking`;
+                } else if (machineStatus === 'U') {
+                    timerModalLabel.innerText = `Machine ${machineNumber} (${getMachineTypeDisplay(machineType)}) is unknown`;
                 } else {
                     timerModalLabel.innerText = `Machine ${machineNumber} (${getMachineTypeDisplay(machineType)})`;
                 }
@@ -39,7 +43,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const isDefectNoteLabel = document.getElementById('isDefectNoteLabel');
             if (defectLink && isDefectNote && isDefectNoteLabel) {
                 if (machineStatus === 'D') {
-                    defectLink.innerText = `${getMachineTypeDisplay(machineType)} is defect`;
+                    defectLink.innerText = `Mark ${getMachineTypeDisplay(machineType)} as repaired`;
+                    defectLink.style.color = 'green';
+
+                    // hide defect note
+                    isDefectNote.style.display = 'none';
+                    isDefectNoteLabel.style.display = 'none';
+                } else if (machineStatus === 'B') {
+                    defectLink.innerText = `Mark ${getMachineTypeDisplay(machineType)} as not blinking`;
                     defectLink.style.color = 'green';
 
                     // hide defect note
@@ -64,9 +75,15 @@ document.addEventListener('DOMContentLoaded', function () {
             if (machineStatus === 'D') {
                 document.getElementById('setDefectBtn').style.display = 'none';
                 document.getElementById('repairBtn').style.display = 'block';
+                document.getElementById('isBlinkingBtn').innerText = 'Mark as blinking';
+            } else if (machineStatus === 'B') {
+                document.getElementById('setDefectBtn').style.display = 'none';
+                document.getElementById('repairBtn').style.display = 'none';
+                document.getElementById('isBlinkingBtn').innerText = 'Mark as available';
             } else {
                 document.getElementById('setDefectBtn').style.display = 'block';
                 document.getElementById('repairBtn').style.display = 'none';
+                document.getElementById('isBlinkingBtn').innerText = 'Machine is blinking';
             }
 
             const timerDuration = document.getElementById('timerDuration');
@@ -216,6 +233,36 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    document.getElementById('isBlinkingBtn').addEventListener('click', function() {
+        const machineId = document.getElementById('machineId').value;
+        const buildingId = document.getElementById('building_id').value;
+        const csrfToken = document.getElementById('csrfToken').value;
+
+        fetch(`/${buildingId}/laundry/${machineId}/blinking/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ machine_id: machineId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                updateMachineStatus();
+                const modalInstance = bootstrap.Modal.getInstance(document.getElementById('timerModal'));
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            } else {
+                console.error('Failed to set machine as blinking');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
     document.getElementById('defectLink').addEventListener('click', function(event) {
         event.preventDefault();
         const form = document.getElementById('defectForm');
@@ -254,8 +301,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Update machine button class
                 const machineButton = document.getElementById(`button-${machine.identifier}`);
                 if (machineButton) {
-                    machineButton.classList.remove('off', 'running', 'on', 'defect');
-                    machineButton.classList.add(getMachineClass(machine.machine_status));
+                    machineButton.classList.remove('A', 'R', 'F', 'D', 'B', 'U');
+                    machineButton.classList.add(machine.machine_status);
                     machineButton.setAttribute('data-machine-status', machine.machine_status);
                     machineButton.setAttribute('data-machine-notes', machine.notes);
                     machineButton.title = getMachineTitle(machine.machine_status, machine.notes);
@@ -266,8 +313,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 // border color
                 const machineHeader = document.getElementById(`header-${machine.identifier}`);
                 if (machineHeader) {
-                    machineHeader.classList.remove('off', 'running', 'on', 'defect');
-                    machineHeader.classList.add(getMachineClass(machine.machine_status));
+                    machineHeader.classList.remove('R', 'F', 'D', 'B', 'U');
+                    machineHeader.classList.add(machine.machine_status);
                 } else {
                     console.error(`Element with ID header-${machine.identifier} not found`);
                 }
@@ -285,17 +332,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Helper function to get the machine type display
     function getMachineTypeDisplay(type) {
-        if (type === 'W') return 'Washer';
-        if (type === 'D') return 'Dryer';
-        return '';
-    }
-
-    // Helper function to get the CSS class for machine status
-    function getMachineClass(status) {
-        if (status === 'A') return 'off';
-        if (status === 'R') return 'running';
-        if (status === 'F') return 'on';
-        if (status === 'D') return 'defect';
+        if (type === 'W') return 'washer';
+        if (type === 'D') return 'dryer';
         return '';
     }
 
@@ -304,6 +342,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (status === 'A') return 'click here';
         if (status === 'F') return 'done';
         if (status === 'D') return 'defect';
+        if (status === 'B') return 'blinking';
+        if (status === 'U') return 'unknown';
         return '';
     }
 
@@ -313,14 +353,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (status === 'R') return '<span class="badge bg-warning">Running</span>';
         if (status === 'F') return '<span class="badge bg-primary">Finished</span>';
         if (status === 'D') return '<span class="badge bg-danger">Defect</span>';
+        if (status === 'B') return '<span class="badge bg-warning">Blinking</span>';
+        if (status === 'U') return '<span class="badge bg-secondary">Unknown</span>';
         return '';
     }
 
-    // Helper function to get the end time or last used text
+    // Helper function to get the end time text
     function getEndTimeText(status, endTime) {
         if (status === 'F') return `Finished at:<br>${endTime}`;
         if (status === 'R') return `End time:<br>${endTime}`;
-        return `Last used:<br>${endTime}`;
+        if (status === 'D') return `Defect since:<br>${endTime}`;
+        if (status === 'B') return `Will be available soon:<br>${endTime}`;
+        return `Updated at:<br>${endTime}`;
     }
 
     // Helper function to get the correct machine title
@@ -330,6 +374,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (status === 'A') return 'Click here to start machine';
         if (status === 'F') return 'Machine is available';
         if (status === 'D') return `Machine is defect: ${note}`;
+        if (status === 'B') return 'Machine is blinking';
+        if (status === 'U') return 'Machine status is unknown';
         return '';
     }
 

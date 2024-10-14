@@ -26,7 +26,7 @@ footer {
     height: 80px;
     margin: 10px;
     border-radius: 50%;
-    border: 2px solid black; /* Black border */
+    border: 2px solid black;
     display: inline-block;
     text-align: center;
     line-height: 80px;
@@ -34,23 +34,41 @@ footer {
     color: black;
     cursor: pointer;
 }
-.machine-button.off {
-    background-color: #6d6e53; /* Green color for available machines */
-    color: white; /* White text for better contrast */
+
+@keyframes slow-blink {
+    0%, 100% {
+        box-shadow: 0 0 20px 2px #f37933;
+    }
+    50% {
+        box-shadow: 0 0 5px 1px #f37933;
+    }
+}
+
+.machine-button.A {
+    background-color: #6d6e53;
+    color: white;
     font-weight: bold;
 }
-.machine-button.on {
-    background-color: #baefba; /* Muted grey for finished machines */
+.machine-button.F {
+    background-color: #baefba;
 }
-.machine-button.running {
-    background-color: #f37933; /* Softer yellow for running machines */
+.machine-button.R {
+    background-color: #f37933;
     box-shadow: 0 0 20px 2px #f37933;
+    animation: slow-blink 2s infinite;
 }
-.machine-button.defect {
-    background-color: #dc3545; /* Light grey for defect machines */
-    color: #a9a9a9; /* Dark grey text */
-    cursor: not-allowed; /* Change cursor to indicate non-interactive */
+.machine-button.D {
+    background-color: #dc3545;
+    color: #a9a9a9;
+    cursor: not-allowed;
 }
+.machine-button.B {
+    background-color: #f0c66e;
+    color: #616161;
+    cursor: not-allowed;
+    animation: slow-blink 2s infinite;
+}
+
 .machine-button-label {
     font-size: 14px;
     color: #003f5c; /* Darker color for text */
@@ -62,20 +80,24 @@ footer {
     padding-bottom: 5px;
 }
 
-.machine-header.off {
+.machine-header.A {
     border-bottom-color: #4caf50; /* Green color for available machines */
 }
 
-.machine-header.running {
+.machine-header.R {
     border-bottom-color: #ff9800; /* Orange color for running machines */
 }
 
-.machine-header.on {
+.machine-header.F {
     border-bottom-color: #2196f3; /* Blue color for finished machines */
 }
 
-.machine-header.defect {
+.machine-header.D {
     border-bottom-color: #f44336; /* Red color for defect machines */
+}
+
+.machine-header.B {
+    border-bottom-color: #ffc107; /* Yellow color for blocked machines */
 }
 
 .container {

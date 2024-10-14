@@ -13,7 +13,7 @@ def get_default_building():
         return Building.objects.first()
     else:
         # Erstelle ein Dummy-Gebäude, falls keines existiert
-        return Building.objects.create(name='Default Building')
+        return Building.objects.create(name='Demo Building')
 
 def get_default_machine_number():
     if Machine.objects.exists():
@@ -88,6 +88,14 @@ class Machine(models.Model):
         if self.machine_status == 'R' and self.remaining_time() == 0:
             self.machine_status = 'F'
             self.timer = 0
+            self.timer_start = timezone.now()
+            self.save()
+
+            return True
+        elif self.machine_status == 'B' and self.remaining_time() == 0:
+            self.machine_status = 'A'
+            self.timer = 0
+            self.timer_start = timezone.now()
             self.save()
 
             return True
@@ -121,6 +129,18 @@ class Machine(models.Model):
         self.machine_status = 'D'
         self.timer = 0
         self.save()
+
+    def set_blinking(self):
+        if self.machine_status == 'B':
+            self.machine_status = 'A'
+            self.timer = 0
+            self.timer_start = timezone.now()
+            self.save()
+        else:
+            self.machine_status = 'B'
+            self.timer = 8 * 60 # 8 hours
+            self.timer_start = timezone.now()
+            self.save()
 
     @staticmethod
     def get_building_name(building: str) -> str:

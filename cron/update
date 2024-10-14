@@ -1,2 +1,2 @@
 # update (Crontab-File)
-* * * * * root python /app/manage.py update >> /var/log/cron.log 2>&1
+* * * * * export SQLITE_PATH=/data/db.sqlite3 && /usr/local/bin/python /app/manage.py update >> /var/log/cron.log 2>&1

@@ -1,4 +1,5 @@
 from datetime import datetime
+from platform import machine
 
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
@@ -22,16 +23,20 @@ def index(request, building):
         machines_data = []
 
         # Update all machines
-        for machine in machines:
+        for m in machines:
+            if m.update():
+                if m.machine_status == 'F':
+                    send_machine_finished_notification(m)
+
             machines_data.append({
-                'identifier': str(machine.identifier),
-                'number': int(machine.number),
-                'machine_type_display': machine.get_machine_type_display(),
-                'machine_status': machine.machine_status,
-                'remaining_time': machine.remaining_time(),
-                'end_time': timezone.localtime(machine.end_time()).strftime('%a, %d %b %H:%M'),
-                'notes': machine.get_notes(),
-                'notes_date': timezone.localtime(machine.notes_date).strftime('%d.%m.%Y %H:%M')
+                'identifier': str(m.identifier),
+                'number': int(m.number),
+                'machine_type_display': m.get_machine_type_display(),
+                'machine_status': m.machine_status,
+                'remaining_time': m.remaining_time(),
+                'end_time': timezone.localtime(m.end_time()).strftime('%a, %d %b %H:%M'),
+                'notes': m.get_notes(),
+                'notes_date': timezone.localtime(m.notes_date).strftime('%d.%m.%Y %H:%M')
             })
 
         return JsonResponse({'machines': machines_data})
@@ -39,6 +44,12 @@ def index(request, building):
     else:
         # GET-Request: Seite mit Maschinenliste zurückgeben
         machines = Machine.objects.filter(building=building)
+
+        # Update all machines
+        for m in machines:
+            if m.update():
+                if m.machine_status == 'F':
+                    send_machine_finished_notification(m)
 
         return render(
             request, 'timer/index.html',
@@ -131,6 +142,18 @@ def set_repair(request, building, machine_id):
         send_machine_available_notification(machine)
 
         machine.set_notes('')
+        return JsonResponse({'status': 'success'})
+
+    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+
+def set_blinking(request, building, machine_id):
+    if request.method == 'POST':
+        try:
+            machine = Machine.objects.get(identifier=machine_id, building=building)
+        except ObjectDoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Invalid machine or building'}, status=400)
+
+        machine.set_blinking()
         return JsonResponse({'status': 'success'})
 
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)

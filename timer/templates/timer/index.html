@@ -77,12 +77,12 @@
             <div class="col-md-2 mb-4">
                 <div class="p-3" id="machine-{{ machine.identifier }}" style="background-color: {% if machine.machine_type == 'D' %}#fff9c4{% else %}#b3e5fc{% endif %}; border-radius: 15px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                     <!-- Header -->
-                    <div class="text-center mb-2 machine-header {% if machine.machine_status == 'R' %}running{% elif machine.machine_status == 'A' %}off{% elif machine.machine_status == 'D' %}defect{% else %}on{% endif %}" id="header-{{ machine.identifier }}">
+                    <div class="text-center mb-2 machine-header {{ machine.machine_status }}" id="header-{{ machine.identifier }}">
                         {{ machine.number }} ({{ machine.get_machine_type_display }})
                     </div>
                     <!-- Machine Button -->
                     <div id="button-{{ machine.identifier }}"
-                        class="machine-button {% if machine.machine_status == 'R' %}running{% elif machine.machine_status == 'A' %}off{% elif machine.machine_status == 'D' %}defect{% else %}on{% endif %}"
+                        class="machine-button {{ machine.machine_status }}"
                         data-bs-toggle="modal"
                         data-bs-target="#timerModal"
                         data-machine-id="{{ machine.identifier }}"
@@ -90,7 +90,7 @@
                         data-machine-type="{{ machine.machine_type }}"
                         data-machine-number="{{ machine.number }}"
                         data-machine-notes="{{ machine.notes }}"
-                        title="{% if machine.machine_status == 'A' %}Click here to start{% elif machine.machine_status == 'F' %}This machine has finished{% elif machine.machine_status == 'D' %}Machine is defect: {{ machine.notes }}{% endif %}"
+                        title="{% if machine.machine_status == 'A' %}Click here to start{% elif machine.machine_status == 'F' %}This machine has finished{% elif machine.machine_status == 'D' %}Machine is defect: {{ machine.notes }}{% elif machine.machine_status == 'B' %}Machine is blinking{% else %}This machine status unknown{% endif %}"
                         style="
                             border-radius: 50%;
                             width: 100px;
@@ -106,8 +106,12 @@
                                 {{ machine.remaining_time }} min
                             {% elif machine.machine_status == 'F' %}
                                 done
-                            {% else %}
+                            {% elif machine.machine_status == 'D' %}
                                 defect
+                            {% elif machine.machine_status == 'B' %}
+                                blinking
+                            {% else %}
+                                unknown
                             {% endif %}
                         </span>
                     </div>
@@ -121,6 +125,10 @@
                             <span class="badge bg-primary">Finished</span>
                         {% elif machine.machine_status == 'D' %}
                             <span class="badge bg-danger">Defect</span>
+                        {% elif machine.machine_status == 'B' %}
+                            <span class="badge bg-warning">Blinking</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Unknown</span>
                         {% endif %}
                     </div>
                     <!-- Available Button -->
@@ -134,8 +142,12 @@
                                 Finished at:<br>{{ machine.end_time|date:"D, d M H:i" }}
                             {% elif machine.machine_status == 'R' %}
                                 End time:<br>{{ machine.end_time|date:"D, d M H:i" }}
+                            {% elif machine.machine_status == 'D' %}
+                                Defect since:<br>{{ machine.end_time|date:"D, d M H:i" }}
+                            {% elif machine.machine_status == 'B' %}
+                                Will be available soon:<br>{{ machine.end_time|date:"D, d M H:i" }}
                             {% else %}
-                                Last used:<br>{{ machine.end_time|date:"D, d M H:i" }}
+                                updated at:<br>{{ machine.end_time|date:"D, d M H:i" }}
                             {% endif %}
                         </i>
                     </div>
@@ -176,8 +188,9 @@
                             <input type="hidden" id="machineId" name="machineId">
 
                             <div class="d-flex justify-content-center align-items-center mt-3">
-                                <button type="submit" class="btn btn-danger w-100" id="setDefectBtn" form="defectForm">Mark as defect</button>
-                                <button type="button" class="btn btn-success w-100" id="repairBtn" style="display: none;">Mark as repaired</button>
+                                <button type="submit" class="btn btn-danger w-100 me-2" id="setDefectBtn" form="defectForm">Mark as defect</button>
+                                <button type="button" class="btn btn-success w-100 me-2" id="repairBtn" style="display: none;">Mark as repaired</button>
+                                <button type="button" class="btn btn-warning w-100" id="isBlinkingBtn">Machine is blinking</button>
                             </div>
                         </form>
                     </div>
