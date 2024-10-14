@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.contrib import admin
 from django.conf import settings
+from django.http import HttpResponseForbidden
 from django.utils import timezone
 from django.utils.html import format_html
 from django.contrib.auth.models import Group
@@ -59,6 +62,7 @@ class BuildingAdmin(ImportExportModelAdmin):
 
     building_link.short_description = 'Building Link'
 
+
 class BuildingFilter(admin.SimpleListFilter):
     title = 'Building'
     parameter_name = 'building'
@@ -81,6 +85,7 @@ class BuildingFilter(admin.SimpleListFilter):
             return queryset.filter(building_id=self.value())
         return queryset
 
+
 class MachineResource(resources.ModelResource):
     class Meta:
         model = Machine
@@ -88,8 +93,6 @@ class MachineResource(resources.ModelResource):
         import_id_fields = ('identifier',)
         export_order = ('identifier', 'number', 'building', 'machine_type', 'machine_status', 'timer', 'timer_start', 'notes', 'notes_date')
 
-
-from datetime import timedelta
 
 @admin.register(Machine)
 class MachineAdmin(ImportExportModelAdmin):
@@ -151,6 +154,12 @@ class MachineAdmin(ImportExportModelAdmin):
             return Machine.objects.filter(building__buildingassignment__user=request.user)
 
         return Machine.objects.none()
+
+    def save_model(self, request, obj, form, change):
+        if request.user.groups.filter(name='Moderator').exists():
+            if not BuildingAssignment.objects.filter(user=request.user, building=obj.building).exists():
+                return HttpResponseForbidden('You are not allowed to modify machines in this building.')
+        super().save_model(request, obj, form, change)
 
 
 class BuildingAssignmentResource(resources.ModelResource):
