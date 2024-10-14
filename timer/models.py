@@ -27,6 +27,8 @@ class Building(models.Model):
 
     name = models.CharField(max_length=100)
 
+    description = models.TextField(blank=True, default='')
+
     def get_name(self):
         return f"{self.name}"
 

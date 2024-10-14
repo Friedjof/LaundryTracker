@@ -21,6 +21,12 @@ footer {
     padding: 1rem 0;
 }
 
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .machine-button {
     width: 80px;
     height: 80px;
@@ -151,6 +157,35 @@ h1 {
 .round-button:focus {
     outline: none;
     box-shadow: 0 0 0 4px #fac375;
+}
+
+.description-button {
+    background-color: rgba(105, 59, 54, 1); /* Etwas transparenter */
+    color: #f4f0bc;
+    border: none;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+.description-button:hover {
+    background-color: rgb(53, 42, 51); /* Leichteres Hover */
+    border: none;
+}
+
+.description-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px #fac375; /* Weniger intensiver Fokus-Schatten */
+}
+
+/* Füge dies zum übergeordneten Container des Buttons hinzu */
+.parent-container {
+    align-items: center;
+    justify-content: center; /* Optional: Zentriert den Button auch horizontal */
 }
 
 /* home button */

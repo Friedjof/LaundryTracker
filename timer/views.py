@@ -1,5 +1,7 @@
 from datetime import datetime
-from platform import machine
+
+import markdown
+import bleach
 
 from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
@@ -54,6 +56,7 @@ def index(request, building):
         return render(
             request, 'timer/index.html',
             {
+                'building_description': markdown.markdown(bleach.clean(building.description)),
                 'machines': machines,
                 'building': building.get_name(),
                 'building_code': building.identifier,

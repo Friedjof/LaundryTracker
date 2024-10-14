@@ -45,7 +45,7 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
+<!-- Header -->
     <header>
         <div class="row align-items-center bg-dark text-white p-1 mx-2">
             <div class="col-auto m-0 p-1">
@@ -60,14 +60,41 @@
         </div>
     </header>
 
+    {% if building_description != '' %}
+    <!-- Building description -->
+    <button type="button" class="description-button mx-2 my-0" data-bs-toggle="modal" data-bs-target="#exampleModal" title="More information about the building">
+      <i class="fas fa-info-circle"></i>&nbsp;Building Description
+    </button>
+    {% endif %}
+
     <!-- Info Notice -->
-    <div class="alert text-center py-0 mx-2" style="background-color: #e8dbb8; border-radius: 0 0 15px 15px; font-size: 0.875em;">
+    <div class="alert text-center py-0 mx-2" style="background-color: #e8dbb8; border-radius: 0 0 15px 15px; font-size: 0.875em; margin: 0">
         <i class="fas fa-exclamation-triangle"></i> Please note: The actual status of the washing machines may vary from the information provided, as it is based on user inputs.
     </div>
 
     <!-- hidden inputs for machine status -->
     <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
     <input type="hidden" id="building_id" value="{{ building_code }}">
+
+    <!-- Modal -->
+    {% if building_description != '' %}
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{ building }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>{{ building_description|safe }}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
     <!-- Main Content -->
     <div class="container my-3">
