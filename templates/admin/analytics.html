@@ -1,0 +1,34 @@
+{% extends "admin/base_site.html" %}
+{% block nav-global %}
+{% endblock %}
+    <div class="nav-global">
+        <ul>
+            <a href="{% url 'admin:index' %}">Administration panel</a>
+        </ul>
+    </div>
+
+{% block content %}
+<div id="charts-container"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const charts = {{ charts|safe }};
+        const container = document.getElementById('charts-container');
+
+        let row;
+        charts.forEach((chart, index) => {
+            if (index % 3 === 0) {
+                row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.justifyContent = 'space-between';
+                row.style.marginBottom = '20px';
+                container.appendChild(row);
+            }
+            const img = document.createElement('img');
+            img.src = `data:image/png;base64,${chart}`;
+            img.style.width = '32%';  // Adjust width to fit three images per row
+            row.appendChild(img);
+        });
+    });
+</script>
+{% endblock %}

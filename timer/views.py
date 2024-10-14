@@ -125,8 +125,7 @@ def set_defect(request, building, machine_id):
         if len(notes) > 500:
             return JsonResponse({'status': 'error', 'message': 'Notes too long'}, status=400)
 
-        machine.set_notes(notes)
-        machine.set_defect()
+        machine.set_defect(notes=notes)
 
         return JsonResponse({'status': 'success'})
 
@@ -144,7 +143,8 @@ def set_repair(request, building, machine_id):
         # trigger notification
         send_machine_available_notification(machine)
 
-        machine.set_notes('')
+        machine.set_notes()
+
         return JsonResponse({'status': 'success'})
 
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)

@@ -111,6 +111,7 @@ class MachineAdmin(ImportExportModelAdmin):
             'fields': ('timer', 'timer_start', 'notes', 'notes_date'),
         }),
     )
+    actions = ('set_unknown', 'set_available', 'snapshot')
 
     def building_link(self, obj):
         protocol = 'https' if settings.TLS_ACTIVE else 'http'
@@ -160,6 +161,22 @@ class MachineAdmin(ImportExportModelAdmin):
             if not BuildingAssignment.objects.filter(user=request.user, building=obj.building).exists():
                 return HttpResponseForbidden('You are not allowed to modify machines in this building.')
         super().save_model(request, obj, form, change)
+
+    def set_unknown(self, request, queryset):
+        queryset.update(machine_status='U')
+
+    set_unknown.short_description = 'Set Unknown'
+
+    def set_available(self, request, queryset):
+        queryset.update(machine_status='A')
+
+    set_available.short_description = 'Set Available'
+
+    def snapshot(self, request, queryset):
+        for machine in queryset:
+            machine.snapshot()
+
+    snapshot.short_description = 'Create Snapshot'
 
 
 class BuildingAssignmentResource(resources.ModelResource):

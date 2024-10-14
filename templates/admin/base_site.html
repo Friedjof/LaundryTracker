@@ -5,3 +5,11 @@
 {% block branding %}
     <h1 id="site-name"><a href="{% url 'admin:index' %}">LaundryTracker administration</a></h1>
 {% endblock %}
+
+{% block nav-global %}
+    <div class="nav-global">
+        <ul>
+            <a href="{% url 'admin:analytics' %}">Analytics</a>
+        </ul>
+    </div>
+{% endblock %}

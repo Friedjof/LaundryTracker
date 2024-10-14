@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 
 from django.utils import timezone
 
+from analytics.models import History
+
 
 # This function returns the default building if it exists, otherwise it creates a dummy building
 def get_default_building():
@@ -55,7 +57,6 @@ class Machine(models.Model):
     identifier = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
 
     building = models.ForeignKey(Building, on_delete=models.CASCADE, default=get_default_building)
-
     number = models.PositiveIntegerField(default=get_default_machine_number)
 
     machine_type = models.CharField(max_length=1, choices=MACHINE_TYPE)
@@ -67,6 +68,10 @@ class Machine(models.Model):
     notes = models.TextField(blank=True)
     notes_date = models.DateTimeField(default=timezone.now)
 
+    def save(self, *args, force_insert=False, force_update=False, using=None, update_fields=None, **kwargs):
+        History.snapshot(self)
+
+        super().save(*args, force_insert, force_update, using, update_fields, **kwargs)
 
     def start_timer(self, timer: int = 90):
         self.timer = timer
@@ -122,12 +127,15 @@ class Machine(models.Model):
     def get_notes(self):
         return self.notes
 
-    def set_notes(self, notes: str):
+    def set_notes(self, notes: str = ''):
         self.notes = notes
         self.notes_date = timezone.now()
         self.save()
 
-    def set_defect(self):
+    def set_defect(self, notes: str = None):
+        if notes:
+            self.notes = notes
+            self.notes_date = timezone.now()
         self.machine_status = 'D'
         self.timer = 0
         self.save()
@@ -147,6 +155,9 @@ class Machine(models.Model):
     @staticmethod
     def get_building_name(building: str) -> str:
         return Building.objects.get(short_name=building).get_name()
+
+    def snapshot(self):
+        History.snapshot(self)
 
     def __str__(self):
         return f'{self.get_machine_type_display()} ({self.number}) ({self._get_building_display()})'
