@@ -121,7 +121,7 @@ footer {
     font-weight: bold;
 }
 
-h1 {
+.mb-1.h1 {
     font-size: 2.5rem;
     color: white;
     font-weight: bold;
@@ -242,8 +242,8 @@ h1 {
 }
 
 @media (max-width: 360px) {
-    h1 {
-        font-size: 4px;
+    .mb-1.h1 {
+        font-size: 3px;
     }
     .header-image {
         width: 50px;
@@ -252,8 +252,8 @@ h1 {
 }
 
 @media (max-width: 576px) {
-    h1 {
-        font-size: 1.5rem;
+    .mb-1.h1 {
+        font-size: 1.2rem;
     }
     .header-image {
         width: 60px;
@@ -263,7 +263,7 @@ h1 {
 
 /* Small devices (phones, 576px and up) */
 @media (min-width: 576px) {
-    h1 {
+    .mb-1.h1 {
         font-size: 1.75rem;
     }
     .header-image {
@@ -274,7 +274,7 @@ h1 {
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
-    h1 {
+    .mb-1.h1 {
         font-size: 2rem;
     }
     .header-image {
@@ -285,7 +285,7 @@ h1 {
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-    h1 {
+    .mb-1.h1 {
         font-size: 2.25rem;
     }
     .header-image {
@@ -299,4 +299,11 @@ h1 {
     border-radius: 10px; /* Rounded corners */
     color: white; /* Text color */
     padding: 20px; /* Optional: Add some padding */
+}
+
+.no-other-styles {
+    color: black;
+    font-size: 16px;
+    margin: 10px 0;
+    /* Add any other styles you need */
 }
