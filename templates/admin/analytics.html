@@ -15,6 +15,13 @@
         const charts = {{ charts|safe }};
         const container = document.getElementById('charts-container');
 
+        if (charts.length === 0) {
+            const noData = document.createElement('p');
+            noData.textContent = 'No data available or an error occurred while calculating the analytics.';
+            container.appendChild(noData);
+            return;
+        }
+
         let row;
         charts.forEach((chart, index) => {
             if (index % 3 === 0) {

@@ -344,9 +344,13 @@ class Diagrams:
 
         # Create the bar chart with error bars
         fig, ax = plt.subplots()
-        ax.bar(machine_types, avg_times_values, yerr=[
-            (avg_times_values[i] - min_times_values[i], max_times_values[i] - avg_times_values[i]) for i in range(len(avg_times_values))
-        ], capsize=5)
+        tmp_y_err = [
+            (avg_times_values[i] - min_times_values[i], max_times_values[i] - avg_times_values[i])
+            for i in range(len(avg_times_values))
+        ]
+        tmp_y_err = list(zip(*tmp_y_err))  # Transpose the list of tuples to match the required shape
+
+        ax.bar(machine_types, avg_times_values, yerr=tmp_y_err, capsize=5)
 
         ax.set_xlabel('Machine Type')
         ax.set_ylabel('Average Running Time (minutes)')

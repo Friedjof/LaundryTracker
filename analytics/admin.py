@@ -49,17 +49,21 @@ class HistoryAdmin(admin.ModelAdmin):
 
     @staticmethod
     def analytics_view(request):
-        charts = [
-            Diagrams.map_weekday_hour_diagram(),
-            Diagrams.running_machines_per_weekday_avg_linechart(),
-            Diagrams.last_3_weeks_of_running_machines(),
-            Diagrams.states_per_building(),
-            Diagrams.last_3_weeks_of_machine_status(),
-            Diagrams.used_machines_per_type_and_building(),
-            Diagrams.avg_running_time_per_machine_type(),
-            Diagrams.machine_status_distribution(),
-            Diagrams.machine_types_per_building(),
-        ]
+        try:
+            charts = [
+                Diagrams.map_weekday_hour_diagram(),
+                Diagrams.running_machines_per_weekday_avg_linechart(),
+                Diagrams.last_3_weeks_of_running_machines(),
+                Diagrams.states_per_building(),
+                Diagrams.last_3_weeks_of_machine_status(),
+                Diagrams.used_machines_per_type_and_building(),
+                Diagrams.avg_running_time_per_machine_type(),
+                Diagrams.machine_status_distribution(),
+                Diagrams.machine_types_per_building(),
+            ]
+        except Exception as e:
+            print(e)
+            charts = []
 
         # States per building
 
