@@ -13,13 +13,12 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const charts = {{ charts|safe }};
-        const chart_error = {{ chart_error|safe }};
         const container = document.getElementById('charts-container');
 
-        if (charts.length === 0 && chart_error !== 'No error') {
-            const noData = document.createElement('p');
-            noData.textContent = `Error: ${chart_error}`;
-            container.appendChild(noData);
+        if (charts.length === 0) {
+            const message = document.createElement('p');
+            message.textContent = 'No data available';
+            container.appendChild(message);
             return;
         }
 

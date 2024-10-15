@@ -4,12 +4,18 @@
 
 {% block branding %}
     <h1 id="site-name"><a href="{% url 'admin:index' %}">LaundryTracker administration</a></h1>
+    <div class="vertical-separator"></div>
+    <h1 id="site-name"><a href="{% url 'admin:analytics' %}" class="button-link">Analytics</a></h1>
 {% endblock %}
 
-{% block nav-global %}
-    <div class="nav-global">
-        <ul>
-            <a href="{% url 'admin:analytics' %}">Analytics</a>
-        </ul>
-    </div>
+{% block extrahead %}
+{{ block.super }}
+<style>
+    .vertical-separator {
+        border-left: 3px solid #000; /* Black line */
+        height: 100%; /* Full height of the container */
+        margin: 0 10px; /* Margin around the separator */
+        display: inline-block; /* Align with h1 elements */
+    }
+</style>
 {% endblock %}
