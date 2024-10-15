@@ -43,7 +43,7 @@ class HistoryAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            path('analytics/', self.admin_site.admin_view(self.analytics_view), name='analytics')
+            path('dashboard/', self.admin_site.admin_view(self.analytics_view), name='analytics')
         ]
         return custom_urls + urls
 
