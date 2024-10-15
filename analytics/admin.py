@@ -49,6 +49,7 @@ class HistoryAdmin(admin.ModelAdmin):
 
     @staticmethod
     def analytics_view(request):
+        chart_error = 'No error'
         try:
             charts = [
                 Diagrams.map_weekday_hour_diagram(),
@@ -62,9 +63,9 @@ class HistoryAdmin(admin.ModelAdmin):
                 Diagrams.machine_types_per_building(),
             ]
         except Exception as e:
-            print(e)
+            chart_error = e
             charts = []
 
         # States per building
 
-        return render(request, 'admin/analytics.html', context={'charts': charts})
+        return render(request, 'admin/analytics.html', context={'charts': charts, 'chart_error': chart_error})
