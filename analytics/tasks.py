@@ -25,7 +25,6 @@ class Diagrams:
             identifier=Subquery(latest_status.values('identifier')[:1])
         ).values('machine_status', 'building_identifier').annotate(total=models.Count('machine_status'))
 
-        # Create a dictionary to store the totals for each building and machine status
         data = {}
         buildings = set()
         machine_statuses = set()
@@ -42,7 +41,6 @@ class Diagrams:
             buildings.add(building)
             machine_statuses.add(machine_status)
 
-        # Ensure each building has an entry for each machine status
         for building in buildings:
             for machine_status in machine_statuses:
                 if machine_status not in data[building]:
@@ -76,15 +74,12 @@ class Diagrams:
 
     @staticmethod
     def running_machines_per_weekday_avg_linechart() -> str:
-        # Filter for running machines
         running_machines = History.objects.filter(machine_status='R')
 
-        # Annotate with the weekday and building, then count the occurrences
         weekday_counts = running_machines.annotate(
             weekday=models.functions.ExtractWeekDay('created_at')
         ).values('weekday', 'building').annotate(total=Count('identifier'))
 
-        # Prepare data for plotting
         weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
         buildings = list(set(entry['building'] for entry in weekday_counts))
         data = {building: [0] * 7 for building in buildings}
@@ -92,14 +87,12 @@ class Diagrams:
 
         for entry in weekday_counts:
             building = entry['building']
-            weekday = entry['weekday'] - 1  # Weekday is 1-based (1=Sunday, 7=Saturday)
+            weekday = entry['weekday'] - 1
             data[building][weekday] += entry['total']
             total_days[building][weekday] += 1
 
-        # Calculate the average
         avg_counts = {building: [data[building][i] / total_days[building][i] if total_days[building][i] != 0 else 0 for i in range(7)] for building in buildings}
 
-        # Create the line chart
         fig, ax = plt.subplots()
         for building in buildings:
             ax.plot(weekdays, avg_counts[building], marker='o', label=building)
@@ -110,12 +103,10 @@ class Diagrams:
         ax.legend()
         plt.tight_layout()
 
-        # Save the plot to a buffer
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
         buf.seek(0)
 
-        # Encode the image to base64
         image_base64 = base64.b64encode(buf.read()).decode('utf-8')
 
         buf.close()
@@ -178,18 +169,13 @@ class Diagrams:
 
     @staticmethod
     def last_3_weeks_of_running_machines() -> str:
-        # Calculate the date three weeks ago
         three_weeks_ago = timezone.now() - timedelta(weeks=3)
-
-        # Filter for running machines in the last three weeks
         running_machines = History.objects.filter(machine_status='R', created_at__gte=three_weeks_ago)
 
-        # Annotate with the date and building, then count the occurrences
         daily_counts = running_machines.annotate(
             date=models.functions.TruncDate('created_at')
         ).values('date', 'building').annotate(total=Count('identifier')).order_by('date')
 
-        # Prepare data for plotting
         dates = list(set(entry['date'] for entry in daily_counts))
         dates.sort()
         buildings = list(set(entry['building'] for entry in daily_counts))
@@ -200,7 +186,6 @@ class Diagrams:
             building = entry['building']
             data[building][date_index] = entry['total']
 
-        # Create the line chart
         fig, ax = plt.subplots()
         for building in buildings:
             ax.plot(dates, data[building], marker='o', label=building)
@@ -212,12 +197,10 @@ class Diagrams:
         plt.xticks(rotation=45)
         plt.tight_layout()
 
-        # Save the plot to a buffer
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
         buf.seek(0)
 
-        # Encode the image to base64
         image_base64 = base64.b64encode(buf.read()).decode('utf-8')
 
         buf.close()
@@ -289,25 +272,31 @@ class Diagrams:
     @staticmethod
     def used_machines_per_type_and_building() -> str:
         # Query to get the count of machines per type and building
-        machine_counts = History.objects.filter(machine_status='R').values('building', 'machine_number').annotate(total=Count('machine_identifier'))
+        machine_counts = History.objects.filter(machine_status='R').values('building', 'machine_number').annotate(
+            total=Count('machine_identifier'))
 
         # Prepare data for plotting
         buildings = list(set(entry['building'] for entry in machine_counts))
-        machine_number = list(set(entry['machine_number'] for entry in machine_counts))
-        data = {building: {machine_type: 0 for machine_type in machine_number} for building in buildings}
+        machine_numbers = list(set(entry['machine_number'] for entry in machine_counts))
+        data = {building: {machine_number: 0 for machine_number in machine_numbers} for building in buildings}
 
         for entry in machine_counts:
             data[entry['building']][entry['machine_number']] = entry['total']
 
         # Create the heatmap
         fig, ax = plt.subplots()
-        heatmap_data = [[data[building][machine_type] for machine_type in machine_number] for building in buildings]
+        heatmap_data = [[data[building][machine_number] for machine_number in machine_numbers] for building in buildings]
+
+        # if Invalid shape (0,) for image data
+        if len(heatmap_data) == 0:
+            heatmap_data = [[0]]
+
         cax = ax.matshow(heatmap_data, cmap='YlGnBu')
 
         # Set axis labels
-        ax.set_xticks(range(len(machine_number)))
+        ax.set_xticks(range(len(machine_numbers)))
         ax.set_yticks(range(len(buildings)))
-        ax.set_xticklabels(machine_number)
+        ax.set_xticklabels(machine_numbers)
         ax.set_yticklabels(buildings)
 
         # Add color bar
