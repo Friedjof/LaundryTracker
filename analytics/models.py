@@ -28,6 +28,7 @@ class History(models.Model):
     machine_type = models.CharField(max_length=100, editable=False, choices=MACHINE_TYPE)
     machine_status = models.CharField(max_length=100, editable=False, choices=MACHINE_STATUS)
     machine_number = models.IntegerField(editable=False, default=0)
+    machine_name = models.CharField(max_length=8, editable=False, blank=True)
     timer = models.IntegerField(editable=False)
     timer_start = models.DateTimeField(editable=False)
     notes = models.TextField(editable=False)
@@ -46,6 +47,7 @@ class History(models.Model):
             machine_type=machine.machine_type,
             machine_status=machine.machine_status,
             machine_number=machine.number,
+            machine_name=machine.name,
             timer=machine.timer,
             timer_start=machine.timer_start,
             notes=machine.notes,

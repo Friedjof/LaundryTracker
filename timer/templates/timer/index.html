@@ -107,7 +107,7 @@
                 <div class="p-3" id="machine-{{ machine.identifier }}" style="background-color: {% if machine.machine_type == 'D' %}#fff9c4{% else %}#b3e5fc{% endif %}; border-radius: 15px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
                     <!-- Header -->
                     <div class="text-center mb-2 machine-header {{ machine.machine_status }}" id="header-{{ machine.identifier }}">
-                        {{ machine.number }} ({{ machine.get_machine_type_display }})
+                        {{ machine.name }} ({{ machine.get_machine_type_display }})
                     </div>
                     <!-- Machine Button -->
                     <div id="button-{{ machine.identifier }}"
@@ -117,7 +117,7 @@
                         data-machine-id="{{ machine.identifier }}"
                         data-machine-status="{{ machine.machine_status }}"
                         data-machine-type="{{ machine.machine_type }}"
-                        data-machine-number="{{ machine.number }}"
+                        data-machine-number="{{ machine.name }}"
                         data-machine-notes="{{ machine.notes }}"
                         title="{% if machine.machine_status == 'A' %}Click here to start{% elif machine.machine_status == 'F' %}This machine has finished{% elif machine.machine_status == 'D' %}Machine is defect: {{ machine.notes }}{% elif machine.machine_status == 'B' %}Machine is blinking{% else %}This machine status unknown{% endif %}"
                         style="

@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             data.machines.forEach(machine => {
-                document.getElementById(`header-${machine.identifier}`).innerText = `${machine.number} (${machine.machine_type_display})`;
+                document.getElementById(`header-${machine.identifier}`).innerText = `${machine.name} (${machine.machine_type_display})`;
 
                 document.getElementById(`mark-as-available-${machine.identifier}`).style.display = machine.machine_status === 'F' ? 'block' : 'none';
 

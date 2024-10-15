@@ -33,6 +33,7 @@ def index(request, building):
             machines_data.append({
                 'identifier': str(m.identifier),
                 'number': int(m.number),
+                'name': m.name,
                 'machine_type_display': m.get_machine_type_display(),
                 'machine_status': m.machine_status,
                 'remaining_time': m.remaining_time(),

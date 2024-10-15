@@ -6,9 +6,31 @@ on:
       - 'v*'
 
 jobs:
-  build:
+  commit-version:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get Git Tag and write to version.txt
+        run: |
+          TAG=$(git describe --tags --abbrev=0)
+          echo $TAG > version.txt
+
+      - name: Commit and push version.txt
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update version.txt to $TAG"
+          file_pattern: "version.txt"
+          branch: ${{ github.ref }}
+
+  build:
+    needs: commit-version
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,8 +61,8 @@ jobs:
             ghcr.io/${{ env.OWNER }}/${{ env.REPO_NAME }}:latest
 
   release:
+    needs: build
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

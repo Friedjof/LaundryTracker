@@ -89,17 +89,17 @@ class BuildingFilter(admin.SimpleListFilter):
 class MachineResource(resources.ModelResource):
     class Meta:
         model = Machine
-        fields = ('identifier', 'number', 'building', 'machine_type', 'machine_status', 'timer', 'timer_start', 'notes', 'notes_date')
+        fields = ('identifier', 'number', 'name', 'building', 'machine_type', 'machine_status', 'timer', 'timer_start', 'notes', 'notes_date')
         import_id_fields = ('identifier',)
-        export_order = ('identifier', 'number', 'building', 'machine_type', 'machine_status', 'timer', 'timer_start', 'notes', 'notes_date')
+        export_order = ('identifier', 'number', 'name', 'building', 'machine_type', 'machine_status', 'timer', 'timer_start', 'notes', 'notes_date')
 
 
 @admin.register(Machine)
 class MachineAdmin(ImportExportModelAdmin):
     resource_class = MachineResource
-    list_display = ('number', 'building_link', 'machine_type', 'machine_status', 'timer_minutes', 'timer_start', 'remaining_time', 'notes', 'notes_date')
+    list_display = ('number', 'name', 'building_link', 'machine_type', 'machine_status', 'timer_minutes', 'timer_start', 'remaining_time', 'notes', 'notes_date')
     list_filter = (BuildingFilter, 'machine_type', 'machine_status')
-    search_fields = ('number', 'building__name', 'machine_type')
+    search_fields = ('number', 'name', 'building__name', 'machine_type')
     ordering = ('number',)
     readonly_fields = ('timer_start',)
     fieldsets = (
@@ -108,7 +108,7 @@ class MachineAdmin(ImportExportModelAdmin):
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('timer', 'timer_start', 'notes', 'notes_date'),
+            'fields': ('name', 'timer', 'timer_start', 'notes', 'notes_date'),
         }),
     )
     actions = ('set_unknown', 'set_available', 'snapshot')

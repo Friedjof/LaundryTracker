@@ -77,10 +77,23 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'timer.context_processors.version_context_processor',
             ],
         },
     },
 ]
+
+# Version file
+VERSION_FILE = BASE_DIR / 'version.txt'
+
+# Versionsnummer aus der Datei laden
+if os.path.exists(VERSION_FILE):
+    with open(VERSION_FILE) as f:
+        VERSION = f.read().strip()
+else:
+    VERSION = "v0.0.0"  # Fallback, falls die Datei nicht existiert
+
 
 WSGI_APPLICATION = 'LaundryTracker.wsgi.application'
 

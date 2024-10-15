@@ -1,32 +1,36 @@
-import io
-import base64
-
 from django.contrib import admin
 from django.shortcuts import render
 from django.urls import path
-from django.db import models
-from django.db.models import OuterRef, Subquery
 
-import matplotlib.pyplot as plt
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
-from timer.models import Building
 from .models import History
 from .tasks import Diagrams
 
 
+class HistoryResource(resources.ModelResource):
+    class Meta:
+        model = History
+        fields = ('identifier', 'created_at', 'building_identifier', 'building', 'machine_identifier', 'machine_type', 'machine_status', 'machine_number', 'machine_name', 'timer', 'timer_start', 'notes', 'notes_date')
+        import_id_fields = ('identifier',)
+        export_order = ('identifier', 'created_at', 'building_identifier', 'building', 'machine_identifier', 'machine_type', 'machine_status', 'machine_number', 'machine_name', 'timer', 'timer_start', 'notes', 'notes_date')
+
+
 @admin.register(History)
-class HistoryAdmin(admin.ModelAdmin):
-    list_display = ('identifier', 'created_at', 'building_identifier', 'building', 'machine_identifier', 'machine_type', 'machine_status', 'machine_number', 'timer', 'timer_start', 'notes', 'notes_date')
+class HistoryAdmin(ImportExportModelAdmin):
+    resource_class = HistoryResource
+    list_display = ('identifier', 'created_at', 'building_identifier', 'building', 'machine_identifier', 'machine_type', 'machine_status', 'machine_number', 'machine_name', 'timer', 'timer_start', 'notes', 'notes_date')
     list_filter = ('building', 'machine_type', 'machine_status')
     search_fields = ('machine_identifier',)
     date_hierarchy = 'created_at'
-    readonly_fields = ('identifier', 'created_at', 'building', 'machine_identifier', 'machine_type', 'machine_status', 'machine_number', 'timer', 'timer_start', 'notes', 'notes_date')
+    readonly_fields = ('identifier', 'created_at', 'building', 'machine_identifier', 'machine_type', 'machine_status', 'machine_number', 'machine_name', 'timer', 'timer_start', 'notes', 'notes_date')
     fieldsets = (
         ('General', {
             'fields': ('created_at', 'identifier', 'building')
         }),
         ('Machine', {
-            'fields': ('machine_identifier', 'machine_type', 'machine_status', 'machine_number', 'timer', 'timer_start')
+            'fields': ('machine_identifier', 'machine_type', 'machine_status', 'machine_number', 'machine_name', 'timer', 'timer_start')
         }),
         ('Notes', {
             'fields': ('notes', 'notes_date')

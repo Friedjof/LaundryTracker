@@ -18,8 +18,9 @@ def get_default_building():
         return Building.objects.create(name='Demo Building')
 
 def get_default_machine_number():
-    if Machine.objects.exists():
-        return Machine.objects.last().number + 1
+    default_building = get_default_building()
+    if default_building.machine_set.exists():
+        return default_building.machine_set.last().number + 1
     else:
         return 1
 
@@ -58,8 +59,9 @@ class Machine(models.Model):
 
     building = models.ForeignKey(Building, on_delete=models.CASCADE, default=get_default_building)
     number = models.PositiveIntegerField(default=get_default_machine_number)
+    name = models.CharField(max_length=8, blank=True)
 
-    machine_type = models.CharField(max_length=1, choices=MACHINE_TYPE)
+    machine_type = models.CharField(max_length=1, choices=MACHINE_TYPE, default='W')
     machine_status = models.CharField(max_length=1, choices=MACHINE_STATUS, default='A')
 
     timer = models.PositiveIntegerField(default=0)
@@ -69,6 +71,9 @@ class Machine(models.Model):
     notes_date = models.DateTimeField(default=timezone.now)
 
     def save(self, *args, force_insert=False, force_update=False, using=None, update_fields=None, **kwargs):
+        if not self.name:
+            self.name = f'{self.number}'
+
         History.snapshot(self)
 
         super().save(*args, force_insert, force_update, using, update_fields, **kwargs)
@@ -160,10 +165,10 @@ class Machine(models.Model):
         History.snapshot(self)
 
     def __str__(self):
-        return f'{self.get_machine_type_display()} ({self.number}) ({self._get_building_display()})'
+        return f'{self.get_machine_type_display()} ({self.name}) ({self._get_building_display()})'
 
     def __repr__(self):
-        return f'{self.get_machine_type_display()} ({self.number}) ({self._get_building_display()})'
+        return f'{self.get_machine_type_display()} ({self.name}) ({self._get_building_display()})'
 
     class Meta:
         unique_together = ['building', 'number']
