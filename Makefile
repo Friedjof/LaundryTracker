@@ -31,6 +31,9 @@ clean: down
 
 release:
 	@echo "Creating release"
+	ifndef v
+		$(error v is not defined)
+	endif
 	@echo "Checkout main"
 	@git checkout main
 	@echo "Pulling main"
