@@ -23,6 +23,12 @@ down:
 	@echo "Stopping"
 	@docker compose down
 
+logs:
+	@echo "Showing logs"
+	@docker compose logs -f
+
+restart: down up
+
 demo: build up
 
 clean: down
@@ -50,7 +56,6 @@ release:
 	@echo "Pushing tag $(v)"
 	@git push origin $(v)
 
-
 version:
 	@echo "Updating version.txt with latest tag"
 	@TAG=$(shell git describe --tags --abbrev=0) && \
@@ -58,7 +63,10 @@ version:
 	echo $$TAG > version.txt && \
 	echo "version.txt updated with tag $$TAG"
 
-
 admin:
 	@echo "Creating superuser"
 	@python manage.py createsuperuser
+
+shell:
+	@echo "Starting shell"
+	@python manage.py shell
