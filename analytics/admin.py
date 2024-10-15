@@ -51,20 +51,21 @@ class HistoryAdmin(admin.ModelAdmin):
     def analytics_view(request):
         try:
             charts = [
+                # first row
                 Diagrams.map_weekday_hour_diagram(),
                 Diagrams.running_machines_per_weekday_avg_linechart(),
                 Diagrams.last_3_weeks_of_running_machines(),
-                Diagrams.states_per_building(),
+                # second row
                 Diagrams.last_3_weeks_of_machine_status(),
-                Diagrams.used_machines_per_type_and_building(),
                 Diagrams.avg_running_time_per_machine_type(),
+                Diagrams.used_machines_per_type_and_building(),
+                # third row
                 Diagrams.machine_status_distribution(),
+                Diagrams.states_per_building(),
                 Diagrams.machine_types_per_building(),
             ]
         except Exception as e:
             print(e)
             charts = []
-
-        # States per building
 
         return render(request, 'admin/analytics.html', context={'charts': charts})
