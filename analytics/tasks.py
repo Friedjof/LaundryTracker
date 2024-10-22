@@ -80,18 +80,21 @@ class Diagrams:
             weekday=models.functions.ExtractWeekDay('created_at')
         ).values('weekday', 'building').annotate(total=Count('identifier'))
 
-        weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+        weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         buildings = list(set(entry['building'] for entry in weekday_counts))
         data = {building: [0] * 7 for building in buildings}
         total_days = {building: [0] * 7 for building in buildings}
 
         for entry in weekday_counts:
             building = entry['building']
-            weekday = entry['weekday'] - 1
-            data[building][weekday] += entry['total']
-            total_days[building][weekday] += 1
+            # Adjust weekday to make Monday the first day of the week
+            adjusted_weekday = (entry['weekday'] - 2) % 7
+            data[building][adjusted_weekday] += entry['total']
+            total_days[building][adjusted_weekday] += 1
 
-        avg_counts = {building: [data[building][i] / total_days[building][i] if total_days[building][i] != 0 else 0 for i in range(7)] for building in buildings}
+        avg_counts = {
+            building: [data[building][i] / total_days[building][i] if total_days[building][i] != 0 else 0 for i in
+                       range(7)] for building in buildings}
 
         fig, ax = plt.subplots()
         for building in buildings:
@@ -130,31 +133,36 @@ class Diagrams:
         ).values('weekday', 'hour').annotate(total=Count('identifier'))
 
         # Prepare data for plotting
-        heatmap_data = [[0 for _ in range(24)] for _ in range(7)]  # 7 days, 24 hours
+        heatmap_data = [[0 for _ in range(7)] for _ in range(24)]  # 24 hours, 7 days
 
         for entry in weekday_hour_counts:
-            heatmap_data[entry['weekday'] - 1][entry['hour']] = entry['total']  # Weekday is 1-based (1=Sunday, 7=Saturday)
+            # Adjust weekday to make Monday the first day of the week
+            adjusted_weekday = (entry['weekday'] - 2) % 7
+            heatmap_data[entry['hour']][adjusted_weekday] = entry['total']
 
         # Create the heatmap
         fig, ax = plt.subplots(figsize=(12, 7))
         cax = ax.matshow(heatmap_data, cmap='summer')
 
+        # resize rows and columns size
+        ax.set_aspect('auto')
+
         # Set axis labels
-        ax.set_xticks(range(24))
-        ax.set_yticks(range(7))
-        ax.set_xticklabels(range(24))
-        ax.set_yticklabels(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'])
+        ax.set_xticks(range(7))
+        ax.set_yticks(range(24))
+        ax.set_xticklabels(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
+        ax.set_yticklabels(range(24))
 
         # Add color bar
         fig.colorbar(cax)
 
         # Add text annotations
-        for i in range(7):
-            for j in range(24):
+        for i in range(24):
+            for j in range(7):
                 ax.text(j, i, str(heatmap_data[i][j]), va='center', ha='center', color='black')
 
-        ax.set_xlabel('Hour of the Day')
-        ax.set_ylabel('Weekday')
+        ax.set_xlabel('Weekday')
+        ax.set_ylabel('Hour of the Day')
         ax.set_title('Average Number of Running Machines per Weekday and Hour')
         plt.tight_layout()
 
