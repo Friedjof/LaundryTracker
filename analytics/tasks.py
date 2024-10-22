@@ -133,12 +133,11 @@ class Diagrams:
         heatmap_data = [[0 for _ in range(24)] for _ in range(7)]  # 7 days, 24 hours
 
         for entry in weekday_hour_counts:
-            heatmap_data[entry['weekday'] - 1][entry['hour']] = entry[
-                'total']  # Weekday is 1-based (1=Sunday, 7=Saturday)
+            heatmap_data[entry['weekday'] - 1][entry['hour']] = entry['total']  # Weekday is 1-based (1=Sunday, 7=Saturday)
 
         # Create the heatmap
         fig, ax = plt.subplots(figsize=(12, 7))
-        cax = ax.matshow(heatmap_data, cmap='YlGnBu')
+        cax = ax.matshow(heatmap_data, cmap='summer')
 
         # Set axis labels
         ax.set_xticks(range(24))
@@ -148,6 +147,11 @@ class Diagrams:
 
         # Add color bar
         fig.colorbar(cax)
+
+        # Add text annotations
+        for i in range(7):
+            for j in range(24):
+                ax.text(j, i, str(heatmap_data[i][j]), va='center', ha='center', color='black')
 
         ax.set_xlabel('Hour of the Day')
         ax.set_ylabel('Weekday')
@@ -196,6 +200,9 @@ class Diagrams:
         ax.legend()
         plt.xticks(rotation=45)
         plt.tight_layout()
+
+        # Set date format on x-axis
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d (%a)'))
 
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
@@ -254,7 +261,7 @@ class Diagrams:
         plt.tight_layout()
 
         # Set date format on x-axis
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d (%a)'))
 
         # Save the plot to a buffer
         buf = io.BytesIO()
@@ -285,13 +292,14 @@ class Diagrams:
 
         # Create the heatmap
         fig, ax = plt.subplots()
-        heatmap_data = [[data[building][machine_number] for machine_number in machine_numbers] for building in buildings]
+        heatmap_data = [[data[building][machine_number] for machine_number in machine_numbers] for building in
+                        buildings]
 
         # if Invalid shape (0,) for image data
         if len(heatmap_data) == 0:
             heatmap_data = [[0]]
 
-        cax = ax.matshow(heatmap_data, cmap='YlGnBu')
+        cax = ax.matshow(heatmap_data, cmap='summer')
 
         # Set axis labels
         ax.set_xticks(range(len(machine_numbers)))
@@ -301,6 +309,11 @@ class Diagrams:
 
         # Add color bar
         fig.colorbar(cax)
+
+        # Add text annotations
+        for i in range(len(buildings)):
+            for j in range(len(machine_numbers)):
+                ax.text(j, i, str(heatmap_data[i][j]), va='center', ha='center', color='black')
 
         ax.set_xlabel('Machine Number')
         ax.set_ylabel('Building')
