@@ -1,0 +1,22 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background-color: #f0c66e;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    text-align: center;
+    margin-top: 50px;
+    flex: 1;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}

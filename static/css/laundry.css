@@ -1,0 +1,36 @@
+.machine-card {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+    display: inline-block;
+}
+
+.machine-header {
+    padding: 5px 0;
+    font-size: 20px;
+    border-radius: 10px 10px 0 0;
+}
+
+.machine-body {
+    padding: 5px 0;
+}
+
+.machine-footer {
+    padding: 5px 0;
+    border-radius: 0 0 10px 10px;
+}
+
+.machine-button {
+    background-color: #007bff; /* Button color */
+    width: 90%; /* Full width */
+    color: white; /* Text color */
+    border: none; /* Remove default border */
+    border-radius: 10px; /* Rounded corners */
+    padding: 5px 10px; /* Padding */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
+}

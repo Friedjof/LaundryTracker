@@ -45,9 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'channels',
     'import_export',
 
     'timer',
+    'laundry',
     'notifications',
     'analytics',
 ]
@@ -83,6 +85,9 @@ TEMPLATES = [
         },
     },
 ]
+
+# Channels
+ASGI_APPLICATION = 'LaundryTracker.asgi.application'
 
 # Version file
 VERSION_FILE = BASE_DIR / 'version.txt'

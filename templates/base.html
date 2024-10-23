@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+
+    <title>{% block title %}Welcome to Laundry Tracker{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Other head elements -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/global.css' %}" as="style" rel="stylesheet" onload="this.rel='stylesheet'">
+    <link href="{% static 'css/header.css' %}" as="style" rel="stylesheet" onload="this.rel='stylesheet'">
+
+    <!-- Custom JS -->
+    <script src="{% static 'js/global.js' %}" defer></script>
+
+    <!-- Custom CSS -->
+    {% block css %}
+    {% endblock %}
+
+    <!-- Custom JS -->
+    {% block js %}
+    {% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    {% block header %}
+    {% endblock %}
+
+    <!-- Main Content -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Footer -->
+    {% include 'includes/footer.html' %}
+</body>
+</html>

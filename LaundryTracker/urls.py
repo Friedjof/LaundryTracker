@@ -28,4 +28,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', include('timer.urls')),
+    path('laundry/', include('laundry.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

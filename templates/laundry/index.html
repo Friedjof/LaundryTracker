@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/laundry.css' %}">
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block header %}
+    {% include 'includes/header.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container my-3">
+        <div class="row">
+            {% for machine in machines %}
+                <div class="col-md-2 machine-card">
+                    <div class="machine-header">
+                        {{ machine.name }} ({% if machine.machine_type == 'W' %}Washer{% else %}Dryer{% endif %})
+                        <span class="badge bg-success">Available</span>
+                    </div>
+                    <div class="machine-body">
+                        <button class="machine-button" data-bs-toggle="modal" data-bs-target="#machine-{{ machine.id }}">
+                            click here
+                        </button>
+                    </div>
+                    <div class="machine-footer">
+                        <div>{{ machine.timer_start }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
