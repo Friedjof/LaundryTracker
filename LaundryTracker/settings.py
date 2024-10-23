@@ -38,14 +38,15 @@ CORS_ORIGIN_WHITELIST = [f'{protocol}://{host}' for host in ALLOWED_HOSTS if hos
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'channels',
     'import_export',
 
     'timer',
@@ -88,6 +89,16 @@ TEMPLATES = [
 
 # Channels
 ASGI_APPLICATION = 'LaundryTracker.asgi.application'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('localhost', 6379)],
+        },
+    },
+}
 
 # Version file
 VERSION_FILE = BASE_DIR / 'version.txt'

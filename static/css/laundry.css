@@ -23,14 +23,68 @@
     border-radius: 0 0 10px 10px;
 }
 
-.machine-button {
-    background-color: #007bff; /* Button color */
-    width: 90%; /* Full width */
-    color: white; /* Text color */
-    border: none; /* Remove default border */
-    border-radius: 10px; /* Rounded corners */
-    padding: 5px 10px; /* Padding */
-    font-size: 16px; /* Font size */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
+.machine-btn {
+    background-color: #007bff;
+    width: 90%;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.full-width-span {
+    display: block; /* Make the span behave like a block element */
+    width: 100%; /* Set the width to 100% */
+}
+
+.modal-title + .badge {
+    margin-left: 10px; /* Adjust the value as needed */
+}
+
+#defect-link {
+    color: #ff640e;
+    text-decoration: none;
+}
+
+#defect-form {
+    display: none;
+    margin-top: 10px;
+}
+
+#repair-btn {
+    display: none;
+}
+
+/* CSS classes for different machine statuses */
+span.Available {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+
+span.Finished {
+    background-color: #007bff; /* Blue */
+    color: white;
+}
+
+span.Finished {
+    background-color: #ffc107; /* Yellow */
+    color: black;
+}
+
+span.Defect {
+    background-color: #dc3545; /* Red */
+    color: white;
+}
+
+span.Blinking {
+    background-color: #17a2b8; /* Teal */
+    color: white;
+}
+
+span.Unknown {
+    background-color: #6c757d; /* Gray */
+    color: white;
 }

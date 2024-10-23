@@ -132,6 +132,12 @@ class Machine(models.Model):
     def get_notes(self):
         return self.notes
 
+    def get_status(self):
+        return dict(self.MACHINE_STATUS)[self.machine_status]
+
+    def get_type(self):
+        return dict(self.MACHINE_TYPE)[self.machine_type]
+
     def set_notes(self, notes: str = ''):
         self.notes = notes
         self.notes_date = timezone.now()

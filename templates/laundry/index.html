@@ -5,6 +5,10 @@
     <link rel="stylesheet" href="{% static 'css/laundry.css' %}">
 {% endblock %}
 
+{% block js %}
+    <script src="{% static 'js/laundry.js' %}"></script>
+{% endblock %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block header %}
@@ -12,24 +16,84 @@
 {% endblock %}
 
 {% block content %}
+    <!-- hidden inputs for csrf token and building id -->
+    <input type="hidden" id="csrf-token" value="{{ csrfToken }}">
+    <input type="hidden" id="building-identifier" value="{{ building_identifier }}">
+
+    <!-- machine card template -->
     <div class="container my-3">
         <div class="row">
             {% for machine in machines %}
-                <div class="col-md-2 machine-card">
+                <div id="machine_{{ machine.identifier }}" class="col-md-2 machine-card">
                     <div class="machine-header">
-                        {{ machine.name }} ({% if machine.machine_type == 'W' %}Washer{% else %}Dryer{% endif %})
-                        <span class="badge bg-success">Available</span>
+                        {{ machine.name }} ({{ machine.type }})
+                        <span class="badge {{ machine.status }}" id="machine-status">{{ machine.status }}</span>
                     </div>
                     <div class="machine-body">
-                        <button class="machine-button" data-bs-toggle="modal" data-bs-target="#machine-{{ machine.id }}">
-                            click here
-                        </button>
+                        <div id="machine-time_{{ machine.identifier }}" class="machine-time">{{ machine.time }}</div>
                     </div>
                     <div class="machine-footer">
-                        <div>{{ machine.timer_start }}</div>
+                        <!-- middleware button to open modal -->
+                        <button class="machine-btn"
+                                data-bs-target="#machine-modal"
+                                data-bs-toggle="modal"
+                                data-machine-identifier="{{ machine.identifier }}"
+                                data-machine-name="{{ machine.name }}"
+                                data-machine-type="{{ machine.type }}"
+                                data-machine-status="{{ machine.status }}"
+                                data-machine-note="{{ machine.note }}"
+                                data-machine-time="{{ machine.time }}">
+                            click here
+                        </button>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
+
+    <!-- machine modal -->
+    <div class="modal fade" id="machine-modal" tabindex="-1" aria-labelledby="machine-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="machine-modal-label">Machine Settings</h5>
+                    <span class="badge Unknown" id="modal-machine-status">Loading…</span>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="badge bg-danger full-width-span" id="defect-badge">Loading…</span>
+                    <form id="machine-form" method="POST">
+                        {% csrf_token %}
+                        <label for="modal-machine-duration">Enter machine duration (in minutes):</label>
+                        <input type="number" id="modal-machine-duration" name="machine-duration" class="form-control" required min="1">
+                        <input type="hidden" id="machine-identifier" name="machine-identifier">
+                    </form>
+
+                    <!-- Dropdown to show defect form -->
+                    <div class="mt-3">
+                        <a href="#" id="modal-defect-link">Machine is defect?</a>
+                        <!-- Defect Form -->
+                        <form id="modal-defect-form" method="POST">
+                            {% csrf_token %}
+                            <label for="isDefectNote" id="isDefectNoteLabel">Enter a short note about the defect:</label>
+                            <input type="text" id="isDefectNote" name="isDefectNote" class="form-control" placeholder="Enter defect note (optional but recommended)" maxlength="59">
+                            <input type="hidden" id="machineId" name="machineId">
+
+                            <div class="d-flex justify-content-center align-items-center mt-3">
+                                <button type="submit" class="btn btn-danger w-100 me-2" id="set-defect-btn" form="defectForm">Mark as defect</button>
+                                <button type="button" class="btn btn-success w-100 me-2" id="repair-btn">Mark as repaired</button>
+                                <button type="button" class="btn btn-warning w-100" id="is-blinking-btn">Machine is blinking</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalBtn">Close</button>
+                    <button type="submit" class="btn btn-primary" id="start-machine-btn" form="machine-form">Start Machine</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

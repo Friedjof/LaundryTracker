@@ -70,3 +70,11 @@ admin:
 shell:
 	@echo "Starting shell"
 	@python manage.py shell
+
+redis:
+	@echo "Starting redis"
+	docker compose -f redis.yml up -d
+
+redis-down:
+	@echo "Stopping redis"
+	docker compose -f redis.yml down

@@ -14,7 +14,27 @@
 
 <!-- Building description -->
 {% if building_description != '' %}
-    <button type="button" class="description mx-2 my-0" data-bs-toggle="modal" data-bs-target="#exampleModal" title="More information about the building">
+    <button type="button" class="description mx-2 my-0" data-bs-toggle="modal" data-bs-target="#building-modal" title="More information about the building">
       <i class="fas fa-info-circle"></i>&nbsp;Building Description
     </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="building-modal" tabindex="-1" aria-labelledby="building-modal-label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="building-modal-label">{{ building }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="no-other-styles">
+                {{ building_description|safe }}
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endif %}
