@@ -76,7 +76,7 @@ def index(request, building):
 
 def set_timer(request, building, machine_id):
     if request.method == 'POST':
-        machine = Machine.objects.get(identifier=machine_id)
+        machine = Machine.objects.get(identifier=machine_id, building=building)
 
         if machine is None:
             return JsonResponse({'status': 'error', 'message': 'Invalid machine'}, status=400)
@@ -86,9 +86,21 @@ def set_timer(request, building, machine_id):
         except ValueError:
             return JsonResponse({'status': 'error', 'message': 'Invalid timer duration'}, status=400)
 
+        try:
+            will_ask_for = request.POST.get('will_ask_for_data_donation', 'true').lower() == 'true'
+        except ValueError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid ask_for'}, status=400)
+
         if (machine.machine_status == 'A' or machine.machine_status == 'F') and 180 >= timer_duration >= 1:
             machine.start_timer(timer=timer_duration)
-            return JsonResponse({'status': 'success'})
+
+            machine_ask_for = Machine.get_longest_unused_machine(building)
+
+            # returns machine is not updated since 12 hours
+            if machine_ask_for is not None and machine_ask_for.elapsed_time() > 12 * 60:
+                return JsonResponse({'status': 'success', 'ask_for': machine_ask_for.as_dict() if will_ask_for else None})
+
+            return JsonResponse({'status': 'success', 'ask_for': None})
         return JsonResponse({'status': 'error', 'message': 'Machine is not available'}, status=400)
 
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
@@ -167,6 +179,18 @@ def set_blinking(request, building, machine_id):
             return JsonResponse({'status': 'error', 'message': 'Invalid machine or building'}, status=400)
 
         machine.set_blinking()
+        return JsonResponse({'status': 'success'})
+
+    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+
+def set_finished(request, building, machine_id):
+    if request.method == 'POST':
+        try:
+            machine = Machine.objects.get(identifier=machine_id, building=building)
+        except ObjectDoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Invalid machine or building'}, status=400)
+
+        machine.set_finished()
         return JsonResponse({'status': 'success'})
 
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)

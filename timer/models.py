@@ -94,6 +94,9 @@ class Machine(models.Model):
             return 0
         return int(remaining)
 
+    def elapsed_time(self) -> int:
+        return (timezone.now() - self.timer_start).total_seconds() // 60
+
     def end_time(self) -> datetime:
         return self.timer_start + timezone.timedelta(minutes=self.timer)
 
@@ -106,6 +109,13 @@ class Machine(models.Model):
 
             return True
         elif self.machine_status == 'B' and self.remaining_time() == 0:
+            self.machine_status = 'A'
+            self.timer = 0
+            self.timer_start = timezone.now()
+            self.save()
+
+            return True
+        elif self.machine_status == 'F' and self.elapsed_time() > 120:
             self.machine_status = 'A'
             self.timer = 0
             self.timer_start = timezone.now()
@@ -127,34 +137,42 @@ class Machine(models.Model):
         return dict(self.MACHINE_TYPE)[self.machine_type]
 
     def get_time_note(self) -> str:
-        rt = self.timer - (timezone.now() - self.timer_start).total_seconds() // 60
+        rt = self.timer - (timezone.now() - self.timer_start).total_seconds() / 60
 
-        if rt == 0:
+        if int(rt) == 0:
             return 'right now'
         elif rt < 0:
-            rt *= -1
+            rt = abs(rt)
 
             if rt < 120:
                 return f'{rt:.0f}min ago'
             elif rt < 1440:
-                if rt % 60 == 0:
-                    return f'{rt / 60:.0f}h ago'
-                return f'{rt / 60:.0f}h and {rt % 60:.0f}min ago'
+                hours = rt // 60
+                minutes = rt % 60
+                if minutes == 0:
+                    return f'{hours:.0f}h ago'
+                return f'{hours:.0f}h and {minutes:.0f}min ago'
             else:
-                if rt % 1440 == 0:
-                    return f'{rt / 1440:.0f}d ago'
-                return f'{rt / 1440:.0f}d and {rt % 1440 / 60:.0f}h ago'
+                days = rt // 1440
+                hours = (rt % 1440) // 60
+                if hours == 0:
+                    return f'{days:.0f}d ago'
+                return f'{days:.0f}d and {hours:.0f}h ago'
         else:
             if rt < 120:
                 return f'{rt:.0f}min remaining'
             elif rt < 1440:
-                if rt % 60 == 0:
-                    return f'{rt / 60:.0f}h remaining'
-                return f'{rt / 60:.0f}h and {rt % 60:.0f}min remaining'
+                hours = rt // 60
+                minutes = rt % 60
+                if minutes == 0:
+                    return f'{hours:.0f}h remaining'
+                return f'{hours:.0f}h and {minutes:.0f}min remaining'
             else:
-                if rt % 1440 == 0:
-                    return f'{rt / 1440:.0f}d remaining'
-                return f'{rt / 1440:.0f}d and {rt % 1440 / 60:.0f}h remaining'
+                days = rt // 1440
+                hours = (rt % 1440) // 60
+                if hours == 0:
+                    return f'{days:.0f}d remaining'
+                return f'{days:.0f}d and {hours:.0f}h remaining'
 
     def get_notes(self):
         return self.notes
@@ -195,6 +213,20 @@ class Machine(models.Model):
             self.timer_start = timezone.now()
             self.save()
 
+    def set_finished(self):
+        self.machine_status = 'F'
+        self.timer = 0
+        self.timer_start = timezone.now()
+        self.save()
+
+    @staticmethod
+    def get_longest_unused_machine(building: uuid.UUID) -> 'Machine' or None:
+        machines = Machine.objects.filter(building=building).order_by('timer_start')
+
+        if machines.exists():
+            return machines.first()
+        return None
+
     @staticmethod
     def get_building_name(building: str) -> str:
         return Building.objects.get(short_name=building).get_name()
@@ -207,6 +239,17 @@ class Machine(models.Model):
 
     def __repr__(self):
         return f'{self.get_machine_type_display()} ({self.name}) ({self._get_building_display()})'
+
+    def as_dict(self):
+        return {
+            'identifier': str(self.identifier),
+            'number': int(self.number),
+            'name': self.name,
+            'type': self.get_type(),
+            'status': self.get_status(),
+            'time': self.get_time_note(),
+            'notes': self.get_notes()
+        }
 
     class Meta:
         unique_together = ['building', 'number']

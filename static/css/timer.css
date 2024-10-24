@@ -105,32 +105,32 @@ body::before {
 }
 
 /* CSS classes for different machine statuses */
-span.Available {
+span.Available, button.Available {
     background-color: #28a745; /* Green */
     color: white;
 }
 
-span.Finished {
+span.Finished, button.Finished {
     background-color: #007bff; /* Blue */
     color: white;
 }
 
-span.Running {
+span.Running, button.Running {
     background-color: #ffc107; /* Yellow */
     color: black;
 }
 
-span.Defect {
+span.Defect, button.Defect {
     background-color: #dc3545; /* Red */
     color: white;
 }
 
-span.Blinking {
+span.Blinking, button.Blinking {
     background-color: #17a2b8; /* Teal */
     color: white;
 }
 
-span.Unknown {
+span.Unknown, button.Unknown {
     background-color: #6c757d; /* Gray */
     color: white;
 }
