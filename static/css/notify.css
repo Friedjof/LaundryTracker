@@ -1,0 +1,12 @@
+.notification-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    z-index: 11;
+}
+
+.notification-container .alert {
+    margin-bottom: 0.5rem;
+    transition: opacity 0.5s ease-in-out;
+}

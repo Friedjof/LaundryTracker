@@ -6,6 +6,7 @@
 {% block css %}
     <!-- timer css -->
     <link href="{% static 'css/timer.css' %}" as="style" rel="stylesheet" onload="this.rel='stylesheet'">
+    <link href="{% static 'css/notify.css' %}" as="style" rel="stylesheet" onload="this.rel='stylesheet'">
 
     <!-- needed for linking the static background image -->
     <style>
@@ -18,6 +19,7 @@
 {% block js %}
     <!-- timer js -->
     <script src="{% static 'js/timer.js' %}"></script>
+    <script src="{% static 'js/notify.js' %}"></script>
 {% endblock %}
 
 {% block header %}
@@ -29,6 +31,8 @@
     <div class="alert text-center py-0 mx-2 disclaimer-note">
         <i class="fas fa-exclamation-triangle"></i> Please note: The actual status of the washing machines may vary from the information provided, as it is based on user inputs.
     </div>
+
+    {% include 'includes/notify.html' %}
 
     <!-- hidden inputs for machine status -->
     <input type="hidden" id="csrfToken" value="{{ csrf_token }}">

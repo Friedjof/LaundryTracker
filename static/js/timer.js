@@ -145,8 +145,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data.ask_for) {
                     dataDonation(data.ask_for);
                 }
+                showNotification('Machine started', 'success', 'info');
             } else {
-                alert('Failed to start machine');
+                showNotification('Failed to start machine', 'danger', 'error');
             }
         });
     });
@@ -175,11 +176,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     modalInstance.hide();
                 }
                 update();
+                showNotification('Machine set as defect', 'success', 'info');
             } else {
-                alert('Failed to set machine as defect');
+                showNotification('Failed to set machine as defect', 'danger', 'error');
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => showNotification('Failed to set machine as defect', 'danger', 'error'));
     });
 
     document.getElementById('repair-btn').addEventListener('click', function () {
@@ -199,14 +201,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (modalInstance) {
                     modalInstance.hide();
                 }
+                showNotification('Machine repaired', 'success', 'info');
             } else {
-                alert('Failed to repair machine');
+                showNotification('Failed to repair machine', 'danger', 'error');
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => showNotification('Failed to repair machine', 'danger', 'error'));
     });
 
-    // blink machine button
+    // blink machine button logic
     document.getElementById('is-blinking-btn').addEventListener('click', function () {
         const machineIdentifier = document.getElementById('modal-machine-identifier').value;
 
@@ -225,28 +228,27 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (modalInstance) {
                     modalInstance.hide();
                 }
+                showNotification('Machine set as blinking', 'success', 'info');
             } else {
-                console.error('Failed to set machine as blinking');
+                showNotification('Failed to set machine as blinking', 'danger', 'error');
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            showNotification('Failed to set machine as blinking', 'danger', 'error');
         });
     });
 
-    // machine buttons
+    // machine button logic
     Array.from(document.getElementsByClassName('machine-btn')).forEach(function (button) {
         button.addEventListener('click', function () {
             const identifier = button.getAttribute('data-machine-identifier');
-            //const status = button.getAttribute('data-machine-status');
-            //const type = button.getAttribute('data-machine-type');
-
             const hiddenBtn = document.getElementById(`machine-btn-hidden_${identifier}`);
 
             hiddenBtn.click();
         });
     });
 
+    // update logic
     function update() {
         fetch(`/${buildingIdentifier}/`, {
             method: 'POST',
@@ -287,6 +289,7 @@ document.addEventListener('DOMContentLoaded', function () {
         machineBtnHidden.setAttribute('data-machine-time', data.time);
     }
 
+    // data donation modal
     function dataDonation(machine) {
         // show data-donation-modal
         const trigger = document.getElementById('data-donation-btn');
@@ -357,8 +360,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // open modal
         trigger.click();
-
-        console.log(machine);
     }
 
     document.getElementById('data-donation-available').addEventListener('click', function () {
@@ -374,8 +375,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.status === 'success') {
                     update()
+                    showNotification('Thank you for your data donation :)', 'success', 'info');
                 } else {
-                    alert('Failed to set machine as available');
+                    showNotification('Failed to set machine as available', 'danger', 'error');
                 }
             });
 
@@ -395,8 +397,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.status === 'success') {
                     update()
+                    showNotification('Thank you for your data donation :)', 'success', 'info');
                 } else {
-                    alert('Failed to set machine as finished');
+                    showNotification('Failed to set machine as finished', 'danger', 'error');
                 }
             });
 
@@ -422,8 +425,9 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.status === 'success') {
                 update();
+                showNotification('Thank you for your data donation :)', 'success', 'info');
             } else {
-                alert('Failed to start machine');
+                showNotification('Failed to start machine', 'danger', 'error');
             }
         });
 
@@ -443,8 +447,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.status === 'success') {
                     update()
+                    showNotification('Thank you for your data donation :)', 'success', 'info');
                 } else {
-                    alert('Failed to set machine as blinking');
+                    showNotification('Failed to set machine as blinking', 'danger', 'error');
                 }
             });
 
@@ -464,8 +469,9 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.status === 'success') {
                     update()
+                    showNotification('Thank you for your data donation :)', 'success', 'info');
                 } else {
-                    alert('Failed to set machine as defect');
+                    showNotification('Failed to set machine as defect', 'danger', 'error');
                 }
             });
 
