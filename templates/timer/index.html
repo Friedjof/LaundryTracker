@@ -1,0 +1,70 @@
+{%  extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block css %}
+    <!-- timer css -->
+    <link href="{% static 'css/timer.css' %}" as="style" rel="stylesheet" onload="this.rel='stylesheet'">
+
+    <!-- needed for linking the static background image -->
+    <style>
+        body::before {
+            background-image: url('{% static 'media/bg-index-2.webp' %}');
+        }
+    </style>
+{% endblock %}
+
+{% block js %}
+    <!-- timer js -->
+    <script src="{% static 'js/timer.js' %}"></script>
+{% endblock %}
+
+{% block header %}
+    {% include 'includes/header.html' %}
+{% endblock %}
+
+{% block content %}
+    <!-- Info Note -->
+    <div class="alert text-center py-0 mx-2 disclaimer-note">
+        <i class="fas fa-exclamation-triangle"></i> Please note: The actual status of the washing machines may vary from the information provided, as it is based on user inputs.
+    </div>
+
+    <!-- hidden inputs for machine status -->
+    <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
+    <input type="hidden" id="building-identifier" value="{{ building_identifier }}">
+
+    <!-- machine card template -->
+    <div class="container my-3">
+        <div class="row">
+            {% for machine in machines %}
+                <div id="machine_{{ machine.identifier }}" class="col-md-2 machine-card">
+                    <div class="machine-header">
+                        {{ machine.name }} ({{ machine.type }})
+                        <span class="badge {{ machine.status }}" id="machine-status">{{ machine.status }}</span>
+                    </div>
+                    <div class="machine-body">
+                        <div id="machine-time_{{ machine.identifier }}" class="machine-time">{{ machine.time }}</div>
+                    </div>
+                    <div class="machine-footer">
+                        <!-- middleware button to open modal -->
+                        <button class="machine-btn"
+                                data-bs-target="#machine-modal"
+                                data-bs-toggle="modal"
+                                data-machine-identifier="{{ machine.identifier }}"
+                                data-machine-name="{{ machine.name }}"
+                                data-machine-type="{{ machine.type }}"
+                                data-machine-status="{{ machine.status }}"
+                                data-machine-note="{{ machine.note }}"
+                                data-machine-time="{{ machine.time }}">
+                            click here
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Timer Modal -->
+    {% include 'includes/timer-modal.html' %}
+{% endblock %}

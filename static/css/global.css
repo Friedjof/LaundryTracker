@@ -1,0 +1,32 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background-color: #f0c66e;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    text-align: center;
+    margin-top: 50px;
+    flex: 1;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.warning-message {
+    background-color: rgb(220, 170, 31);
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 0.9em;
+    border: 2px dotted black;
+    color: black;
+}

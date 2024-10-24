@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/header.css' %}" as="style" rel="stylesheet" onload="this.rel='stylesheet'">
+    <link href="{% static 'css/404.css' %}" as="style" rel="stylesheet" onload="this.rel='stylesheet'">
+
+    <style>
+        body {
+            background: url('{% static 'media/bg-404.webp' %}') no-repeat center center fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}404 - Page Not Found | Laundry Tracker{% endblock %}
+
+{% block header %}
+    {% include 'includes/static-header.html' %}
+{% endblock %}
+
+{% block content %}
+<!-- Main Content -->
+<div class="container my-5 position-relative">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center p-5 box-404">
+            <h2>Oops! The page you're looking for doesn't exist.</h2>
+            <p>It seems like the page has been moved or never existed.</p>
+
+            <div class="my-5 mx-3">
+                {% include 'includes/link-info.html' %}
+            </div>
+
+            <a href="/">
+                <button class="home-button">
+                    <i class="fas fa-home"></i> Go back to Home
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

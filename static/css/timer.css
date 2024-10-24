@@ -1,0 +1,136 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    filter: blur(15px); /* Blur-Effekt */
+    z-index: -1; /* Hinter den eigentlichen Inhalt stellen */
+}
+
+.disclaimer-note {
+    background: linear-gradient(to right, rgba(255, 240, 178, 0) 0%, rgba(255, 240, 178, 1) 50%, rgba(255, 240, 178, 0) 100%);
+    font-size: 0.875em;
+    margin: 0;
+}
+
+.defect-link {
+    color: #ff0000;
+}
+
+.defect-form {
+    display: none;
+    margin-top: 10px;
+}
+
+.defect-badge {
+    width: 100%;
+}
+
+.machine-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: white;
+    border-radius: 10px;
+}
+
+.machine-card {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    text-align: center;
+    display: inline-block;
+}
+
+.machine-header {
+    padding: 5px 0;
+    font-size: 20px;
+    border-radius: 10px 10px 0 0;
+}
+
+.machine-body {
+    padding: 5px 0;
+}
+
+.machine-footer {
+    padding: 5px 0;
+    border-radius: 0 0 10px 10px;
+}
+
+.machine-btn {
+    background-color: #007bff;
+    width: 90%;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.full-width-span {
+    display: block; /* Make the span behave like a block element */
+    width: 100%; /* Set the width to 100% */
+}
+
+.modal-title + .badge {
+    margin-left: 10px; /* Adjust the value as needed */
+}
+
+#defect-link {
+    color: #ff640e;
+    text-decoration: none;
+}
+
+#defect-form {
+    display: none;
+    margin-top: 10px;
+}
+
+#repair-btn {
+    display: none;
+}
+
+/* CSS classes for different machine statuses */
+span.Available {
+    background-color: #28a745; /* Green */
+    color: white;
+}
+
+span.Finished {
+    background-color: #007bff; /* Blue */
+    color: white;
+}
+
+span.Running {
+    background-color: #ffc107; /* Yellow */
+    color: black;
+}
+
+span.Defect {
+    background-color: #dc3545; /* Red */
+    color: white;
+}
+
+span.Blinking {
+    background-color: #17a2b8; /* Teal */
+    color: white;
+}
+
+span.Unknown {
+    background-color: #6c757d; /* Gray */
+    color: white;
+}

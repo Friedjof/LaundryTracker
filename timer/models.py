@@ -89,6 +89,7 @@ class Machine(models.Model):
             return 0
 
         remaining = self.timer - (timezone.now() - self.timer_start).total_seconds() // 60
+
         if remaining < 0:
             return 0
         return int(remaining)
@@ -128,6 +129,34 @@ class Machine(models.Model):
 
     def get_machine_type_display(self):
         return dict(self.MACHINE_TYPE)[self.machine_type]
+
+    def get_status(self):
+        return dict(self.MACHINE_STATUS)[self.machine_status]
+
+    def get_type(self):
+        return dict(self.MACHINE_TYPE)[self.machine_type]
+
+    def get_time_note(self) -> str:
+        rt = self.timer - (timezone.now() - self.timer_start).total_seconds() // 60
+
+        if rt == 0:
+            return 'right now'
+        elif rt < 0:
+            rt *= -1
+
+            if rt < 120:
+                return f'{rt:.0f} min ago'
+            elif rt < 1440:
+                return f'{rt / 60:.0f} h and {rt % 60:.0f} min ago'
+            else:
+                return f'{rt / 1440:.0f} d and {rt % 1440 / 60:.0f} h ago'
+        else:
+            if rt < 120:
+                return f'in {rt:.0f} min'
+            elif rt < 1440:
+                return f'in {rt / 60:.0f} h and {rt % 60:.0f} min'
+            else:
+                return f'in {rt / 1440:.0f} d and {rt % 1440 / 60:.0f} h'
 
     def get_notes(self):
         return self.notes

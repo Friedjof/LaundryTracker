@@ -34,33 +34,42 @@ def index(request, building):
                 'identifier': str(m.identifier),
                 'number': int(m.number),
                 'name': m.name,
-                'machine_type_display': m.get_machine_type_display(),
-                'machine_status': m.machine_status,
-                'remaining_time': m.remaining_time(),
-                'end_time': timezone.localtime(m.end_time()).strftime('%a, %d %b %H:%M'),
-                'notes': m.get_notes(),
-                'notes_date': timezone.localtime(m.notes_date).strftime('%d.%m.%Y %H:%M')
+                'type': m.get_machine_type_display(),
+                'status': m.machine_status,
+                'time': m.remaining_time(),
+                'notes': m.get_notes()
             })
 
         return JsonResponse({'machines': machines_data})
 
     else:
         # GET-Request: Seite mit Maschinenliste zurückgeben
-        machines = Machine.objects.filter(building=building)
+        machines = []
 
         # Update all machines
-        for m in machines:
+        for m in Machine.objects.filter(building=building):
             if m.update():
                 if m.machine_status == 'F':
                     send_machine_finished_notification(m)
 
+            machines.append({
+                'identifier': str(m.identifier),
+                'number': int(m.number),
+                'name': m.name,
+                'type': m.get_type(),
+                'status': m.get_status(),
+                'time': m.get_time_note(),
+                'notes': m.get_notes()
+            })
+
         return render(
             request, 'timer/index.html',
             {
+                'title': building.get_name(),
+                'building': building.get_name(),
+                'building_identifier': building.identifier,
                 'building_description': markdown.markdown(bleach.clean(building.description)),
                 'machines': machines,
-                'building': building.get_name(),
-                'building_code': building.identifier,
                 'year': datetime.now().year
             }
         )

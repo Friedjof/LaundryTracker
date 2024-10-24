@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'css/header.css' %}" as="style" rel="stylesheet" onload="this.rel='stylesheet'">
+    <link href="{% static 'css/home.css' %}" as="style" rel="stylesheet" onload="this.rel='stylesheet'">
+
+    <style>
+        body {
+            background: url('{% static 'media/bg-homepage-4.webp' %}') no-repeat center center fixed;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}Welcome to Laundry Tracker{% endblock %}
+
+{% block header %}
+    {% include 'includes/static-header.html' %}
+{% endblock %}
+
+<!-- Main Content -->
+{% block content %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center p-5 home-container">
+                <h2>Welcome to Laundry Tracker</h2>
+                <p class="lead mt-3">Laundry Tracker is a web app that helps you monitor laundry machines in a building. Users can view machine status, set timers, and mark machines as available.</p>
+                <p>With real-time updates and an intuitive interface, Laundry Tracker ensures you never wait for an available machine.</p>
+
+                {% include 'includes/link-info.html' %}
+
+                <a href="https://github.com/Friedjof/LaundryTracker" target="_blank">
+                    <button class="github-button">
+                        <i class="fab fa-github" style="margin-right: 8px;"></i> View on GitHub
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
