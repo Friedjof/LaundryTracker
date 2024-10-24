@@ -41,23 +41,28 @@
                 <div id="machine_{{ machine.identifier }}" class="col-md-2 machine-card">
                     <div class="machine-header">
                         {{ machine.name }} ({{ machine.type }})
-                        <span class="badge {{ machine.status }}" id="machine-status">{{ machine.status }}</span>
+                        <span class="badge {{ machine.status }}" id="machine-status_{{ machine.identifier }}">{{ machine.status }}</span>
                     </div>
                     <div class="machine-body">
                         <div id="machine-time_{{ machine.identifier }}" class="machine-time">{{ machine.time }}</div>
                     </div>
                     <div class="machine-footer">
                         <!-- middleware button to open modal -->
-                        <button class="machine-btn"
+                        <button class="machine-btn" id="machine-btn_{{ machine.identifier }}"
+                                data-machine-identifier="{{ machine.identifier }}"
+                                data-machine-type="{{ machine.type }}"
+                                data-machine-status="{{ machine.status }}">
+                            start {{ machine.type|lower }}
+                        </button>
+                        <button class="machine-btn" id="machine-btn-hidden_{{ machine.identifier }}" style="display: none"
                                 data-bs-target="#machine-modal"
                                 data-bs-toggle="modal"
                                 data-machine-identifier="{{ machine.identifier }}"
                                 data-machine-name="{{ machine.name }}"
                                 data-machine-type="{{ machine.type }}"
                                 data-machine-status="{{ machine.status }}"
-                                data-machine-note="{{ machine.note }}"
+                                data-machine-note="{{ machine.notes }}"
                                 data-machine-time="{{ machine.time }}">
-                            click here
                         </button>
                     </div>
                 </div>

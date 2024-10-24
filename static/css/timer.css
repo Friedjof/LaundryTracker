@@ -134,3 +134,11 @@ span.Unknown {
     background-color: #6c757d; /* Gray */
     color: white;
 }
+
+a.IsWorking {
+    color: #28a745; /* Green */
+}
+
+a.IsDefect {
+    color: #dc3545; /* Red */
+}

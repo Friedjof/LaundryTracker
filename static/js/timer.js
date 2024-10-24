@@ -21,15 +21,76 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalMachineStatus = document.getElementById('modal-machine-status');
         const modalMachineDuration = document.getElementById('modal-machine-duration');
         const modalDefectForm = document.getElementById('modal-defect-form');
+        const modalMachineDurationInput = document.getElementById('modal-machine-duration');
+
+        // elements of defect form
+        const repairBtn = document.getElementById('repair-btn');
+        const setDefectBtn = document.getElementById('set-defect-btn');
+        const isDefectNoteInput = document.getElementById('isDefectNote');
+        const isDefectNoteLabel = document.getElementById('isDefectNoteLabel');
+        const modalDefectLink = document.getElementById('modal-defect-link');
+        const isBlinkingBtn = document.getElementById('is-blinking-btn');
 
         modalMachineIdentifier.value = machineIdentifier;
 
         modalTitle.textContent = `${machineName} (${machineType})`;
 
-        if (machineStatus === 'defect') {
-            modalNote.innerText = machineNote;
+        if (machineStatus === 'Defect' || machineStatus === 'Blinking') {
+            if (machineStatus === 'Blinking') {
+                modalNote.innerText = 'Machine is temporarily unavailable';
+            } else if (machineNote) {
+                modalNote.innerText = `Note: ${machineNote}`;
+            } else {
+                modalNote.innerText = 'No note';
+            }
+
+            // set link label style and text
+            modalDefectLink.classList.remove('IsDefect');
+            modalDefectLink.classList.add('IsWorking');
+
+            if (machineStatus === 'Defect') {
+                modalDefectLink.innerText = `Mark ${machineType.toLowerCase()} as repaired`;
+            } else {
+                modalDefectLink.innerText = `Mark ${machineType.toLowerCase()} as available`;
+            }
+
+            // hide defect form elements
+            setDefectBtn.style.display = 'none';
+            isDefectNoteInput.style.display = 'none';
+            isDefectNoteLabel.style.display = 'none';
+
+            // disable duration input
+            modalMachineDurationInput.disabled = true;
+
+            // show repair button
+            if (machineStatus === 'Defect') {
+                repairBtn.style.display = 'block';
+            } else {
+                repairBtn.style.display = 'none';
+                isBlinkingBtn.style.display = 'block';
+                isBlinkingBtn.innerText = `Mark as available`;
+            }
         } else {
             modalNote.innerText = '';
+
+            // set link label style and text
+            modalDefectLink.classList.remove('IsWorking');
+            modalDefectLink.classList.add('IsDefect');
+            modalDefectLink.innerText = `${machineType} is defect?`;
+
+            // show defect form elements
+            setDefectBtn.style.display = 'block';
+            isDefectNoteInput.style.display = 'block';
+            isDefectNoteLabel.style.display = 'block';
+
+            // hide repair button
+            repairBtn.style.display = 'none';
+
+            // enable duration input
+            modalMachineDurationInput.disabled = false;
+
+            // reset defect note input
+            isDefectNoteInput.value = '';
         }
 
         modalMachineStatus.innerText = machineStatus;
@@ -78,9 +139,93 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (modalInstance) {
                     modalInstance.hide();
                 }
+                update();
             } else {
                 alert('Failed to start machine');
             }
+        });
+    });
+
+    // defect form button click set-defect-btn
+    document.getElementById('set-defect-btn').addEventListener('click', function () {
+        const defectForm = document.getElementById('modal-defect-form');
+        const machineIdentifier = document.getElementById('modal-machine-identifier').value;
+        const isDefectNote = document.getElementById('isDefectNote').value;
+
+        const formData = new FormData(defectForm);
+        formData.append('notes', isDefectNote);
+
+        fetch(`/${buildingIdentifier}/laundry/${machineIdentifier}/defect/`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const modalInstance = bootstrap.Modal.getInstance(document.getElementById('machine-modal'));
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+                update();
+            } else {
+                alert('Failed to set machine as defect');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    document.getElementById('repair-btn').addEventListener('click', function () {
+        const machineIdentifier = document.getElementById('modal-machine-identifier').value;
+
+        fetch(`/${buildingIdentifier}/laundry/${machineIdentifier}/repair/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                update()
+                const modalInstance = bootstrap.Modal.getInstance(document.getElementById('machine-modal'));
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            } else {
+                alert('Failed to repair machine');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // blink machine button
+    document.getElementById('is-blinking-btn').addEventListener('click', function () {
+        const machineIdentifier = document.getElementById('modal-machine-identifier').value;
+
+        fetch(`/${buildingIdentifier}/laundry/${machineIdentifier}/blinking/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ machine_id: machineIdentifier })})
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                update();
+                const modalInstance = bootstrap.Modal.getInstance(document.getElementById('machine-modal'));
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            } else {
+                console.error('Failed to set machine as blinking');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
     });
 
@@ -88,9 +233,54 @@ document.addEventListener('DOMContentLoaded', function () {
     Array.from(document.getElementsByClassName('machine-btn')).forEach(function (button) {
         button.addEventListener('click', function () {
             const identifier = button.getAttribute('data-machine-identifier');
-            // TODO: make this as a middleware for sending the available status if finished
+            const status = button.getAttribute('data-machine-status');
+            const type = button.getAttribute('data-machine-type');
+
+            const hiddenBtn = document.getElementById(`machine-btn-hidden_${identifier}`);
+
+            hiddenBtn.click();
         });
     });
 
-    // TODO: add update machine function (pulling data from server every 5 seconds)
+    function update() {
+        fetch(`/${buildingIdentifier}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+        }).then(
+            response => response.json()
+        ).then(
+            data => {
+                data.machines.forEach(function (machine) {
+                    update_machine(machine.identifier, machine);
+                });
+            }
+        )
+    }
+
+    function update_machine(identifier, data) {
+        const machineStatus = document.getElementById(`machine-status_${identifier}`);
+        const machineTime = document.getElementById(`machine-time_${identifier}`);
+        const machineBtn = document.getElementById(`machine-btn_${identifier}`);
+        const machineBtnHidden = document.getElementById(`machine-btn-hidden_${identifier}`);
+
+        machineStatus.innerText = data.status;
+        machineStatus.classList.remove('Available', 'Running', 'Finished', 'Defect', 'Blinking', 'Unknown');
+        machineStatus.classList.add(data.status);
+
+        machineTime.innerText = data.time;
+
+        // update machine button attributes
+        machineBtn.setAttribute('data-machine-type', data.type);
+        machineBtn.setAttribute('data-machine-status', data.status);
+
+        machineBtnHidden.setAttribute('data-machine-type', data.type);
+        machineBtnHidden.setAttribute('data-machine-status', data.status);
+        machineBtnHidden.setAttribute('data-machine-note', data.notes);
+        machineBtnHidden.setAttribute('data-machine-time', data.time);
+    }
+
+    setInterval(update, 5000);
 });

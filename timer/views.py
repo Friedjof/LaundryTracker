@@ -34,9 +34,9 @@ def index(request, building):
                 'identifier': str(m.identifier),
                 'number': int(m.number),
                 'name': m.name,
-                'type': m.get_machine_type_display(),
-                'status': m.machine_status,
-                'time': m.remaining_time(),
+                'type': m.get_type(),
+                'status': m.get_status(),
+                'time': m.get_time_note(),
                 'notes': m.get_notes()
             })
 

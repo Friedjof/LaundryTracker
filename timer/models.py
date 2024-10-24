@@ -114,16 +114,6 @@ class Machine(models.Model):
             return True
         return False
 
-    def set_available(self) -> bool:
-        if self.machine_status != 'A':
-            self.machine_status = 'A'
-            self.timer_start = timezone.now()
-            self.timer = 0
-            self.save()
-
-            return True
-        return False
-
     def _get_building_display(self):
         return self.building.get_name()
 
@@ -145,18 +135,26 @@ class Machine(models.Model):
             rt *= -1
 
             if rt < 120:
-                return f'{rt:.0f} min ago'
+                return f'{rt:.0f}min ago'
             elif rt < 1440:
-                return f'{rt / 60:.0f} h and {rt % 60:.0f} min ago'
+                if rt % 60 == 0:
+                    return f'{rt / 60:.0f}h ago'
+                return f'{rt / 60:.0f}h and {rt % 60:.0f}min ago'
             else:
-                return f'{rt / 1440:.0f} d and {rt % 1440 / 60:.0f} h ago'
+                if rt % 1440 == 0:
+                    return f'{rt / 1440:.0f}d ago'
+                return f'{rt / 1440:.0f}d and {rt % 1440 / 60:.0f}h ago'
         else:
             if rt < 120:
-                return f'in {rt:.0f} min'
+                return f'{rt:.0f}min remaining'
             elif rt < 1440:
-                return f'in {rt / 60:.0f} h and {rt % 60:.0f} min'
+                if rt % 60 == 0:
+                    return f'{rt / 60:.0f}h remaining'
+                return f'{rt / 60:.0f}h and {rt % 60:.0f}min remaining'
             else:
-                return f'in {rt / 1440:.0f} d and {rt % 1440 / 60:.0f} h'
+                if rt % 1440 == 0:
+                    return f'{rt / 1440:.0f}d remaining'
+                return f'{rt / 1440:.0f}d and {rt % 1440 / 60:.0f}h remaining'
 
     def get_notes(self):
         return self.notes
@@ -171,8 +169,19 @@ class Machine(models.Model):
             self.notes = notes
             self.notes_date = timezone.now()
         self.machine_status = 'D'
+        self.timer_start = timezone.now()
         self.timer = 0
         self.save()
+
+    def set_available(self) -> bool:
+        if self.machine_status != 'A':
+            self.machine_status = 'A'
+            self.timer_start = timezone.now()
+            self.timer = 0
+            self.save()
+
+            return True
+        return False
 
     def set_blinking(self):
         if self.machine_status == 'B':
