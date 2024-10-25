@@ -21,9 +21,18 @@ Additionally, it helps the property management quickly identify defective machin
 
 ## Demo Screenshots
 
-![demo-home](/static/media/demo-home.png)
-![demo-done](/static/media/demo-done.png)
-![demo-report-defect](/static/media/demo-report-defect.png)
+<table>
+  <tr>
+    <td><img src="/media/demo-home.png" alt="demo-home" /></td>
+    <td><img src="/media/demo-machines.png" alt="demo-machines" /></td>
+    <td><img src="/media/demo-analytics-1.png" alt="demo-analytics-1" /></td>
+  </tr>
+  <tr>
+    <td><img src="/media/demo-404.png" alt="demo-404" /></td>
+    <td><img src="/media/demo-timer-modal-defect.png" alt="demo-report-defect" /></td>
+    <td><img src="/media/demo-admin-panel.png" alt="demo-admin-panel" /></td>
+  </tr>
+</table>
 
 ## Installation
 ```bash
@@ -81,7 +90,7 @@ The project includes a `Makefile` with various commands to simplify development 
 > Access the admin panel at `http(s)://<your-domain>/admin/` and log in with the superuser credentials you created.
 > You can add buildings, machines, and notes in the admin panel.
 
-![admin-panel](/static/media/demo-administration-panel.png)
+![admin-panel](/media/demo-admin-panel.png)
 
 ### Machine Status
 - **Available**: The machine is available for use.
