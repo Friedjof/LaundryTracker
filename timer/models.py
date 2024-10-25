@@ -1,5 +1,6 @@
 from datetime import datetime
 import uuid
+import random
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -224,7 +225,7 @@ class Machine(models.Model):
         machines = Machine.objects.filter(building=building).order_by('timer_start')
 
         if machines.exists():
-            return machines.first()
+            return random.choice(machines[:4])
         return None
 
     @staticmethod

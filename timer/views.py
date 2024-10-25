@@ -97,7 +97,7 @@ def set_timer(request, building, machine_id):
             machine_ask_for = Machine.get_longest_unused_machine(building)
 
             # returns machine is not updated since 12 hours
-            if machine_ask_for is not None:# and machine_ask_for.elapsed_time() > 12 * 60:
+            if machine_ask_for is not None and machine_ask_for.elapsed_time() > 6 * 60:
                 return JsonResponse({'status': 'success', 'ask_for': machine_ask_for.as_dict() if will_ask_for else None})
 
             return JsonResponse({'status': 'success', 'ask_for': None})

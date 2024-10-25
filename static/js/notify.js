@@ -34,8 +34,17 @@ function showNotification(message, type = 'success', logLevel = 'info', bell = f
     alert.className = `alert alert-${type} alert-dismissible fade show`;
     alert.role = 'alert';
     alert.innerHTML = `
-        <span class="badge ${badgeClass}">${logLevel.toUpperCase()}</span> ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="row">
+            <div class="col-auto">
+                <span class="badge ${badgeClass}">${logLevel.toUpperCase()}</span>
+            </div>
+            <div class="col">
+                ${message}
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
     `;
     container.appendChild(alert);
 

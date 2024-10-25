@@ -105,7 +105,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // machine modal defect link
-    document.getElementById('modal-defect-link').addEventListener('click', function () {
+    document.getElementById('modal-defect-link').addEventListener('click', function (event) {
+        event.preventDefault();
+
         const modalDefectForm = document.getElementById('modal-defect-form');
 
         if (modalDefectForm.style.display === 'none') {
@@ -257,7 +259,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(data => {
                     if (data.status === 'success') {
                         update();
-                        showNotification('Machine set as available', 'success', 'info');
                     } else {
                         showNotification('Failed to set machine as available', 'danger', 'error');
                     }
@@ -357,6 +358,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (data.status === 'Finished') {
             machineBtn.innerText = `mark as available`;
+        } else if (data.status === 'Running') {
+            machineBtn.innerText = `is running`;
+        } else if (data.status === 'Blinking' || data.status === 'Defect') {
+            machineBtn.innerText = `mark as repaired`;
         } else {
             machineBtn.innerText = `start ${data.type.toLowerCase()}`;
         }
