@@ -65,13 +65,15 @@ document.addEventListener('DOMContentLoaded', function () {
             // show repair button
             if (machineStatus === 'Defect') {
                 repairBtn.style.display = 'block';
+                isBlinkingBtn.innerText = 'Mark as blinking';
             } else {
                 repairBtn.style.display = 'none';
-                isBlinkingBtn.style.display = 'block';
                 isBlinkingBtn.innerText = `Mark as available`;
             }
         } else {
             modalNote.innerText = '';
+
+            isBlinkingBtn.innerText = 'Mark as blinking';
 
             // set link label style and text
             modalDefectLink.classList.remove('IsWorking');
@@ -244,7 +246,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const identifier = button.getAttribute('data-machine-identifier');
             const hiddenBtn = document.getElementById(`machine-btn-hidden_${identifier}`);
 
-            hiddenBtn.click();
+            if (hiddenBtn.getAttribute('data-machine-status') === 'Finished') {
+                fetch(`/${buildingIdentifier}/laundry/${identifier}/available/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        update();
+                        showNotification('Machine set as available', 'success', 'info');
+                    } else {
+                        showNotification('Failed to set machine as available', 'danger', 'error');
+                    }
+                });
+            } else {
+                hiddenBtn.click();
+            }
         });
     });
 
@@ -273,6 +293,58 @@ document.addEventListener('DOMContentLoaded', function () {
         const machineBtn = document.getElementById(`machine-btn_${identifier}`);
         const machineBtnHidden = document.getElementById(`machine-btn-hidden_${identifier}`);
 
+        const specialSymboleDefect = document.getElementById(`special-symbole-defect_${identifier}`);
+        const specialSymboleRunning = document.getElementById(`special-symbole-running_${identifier}`);
+        const specialSymboleBlinking = document.getElementById(`special-symbole-blinking_${identifier}`);
+        const specialSymboleFinished = document.getElementById(`special-symbole-finished_${identifier}`);
+        const specialSymboleAvailable = document.getElementById(`special-symbole-available_${identifier}`);
+
+        if (data.status === 'Defect') {
+            specialSymboleDefect.style.display = 'inline';
+            specialSymboleRunning.style.display = 'none';
+            specialSymboleBlinking.style.display = 'none';
+            specialSymboleFinished.style.display = 'none';
+            specialSymboleAvailable.style.display = 'none';
+        } else if (data.status === 'Running') {
+            specialSymboleDefect.style.display = 'none';
+            specialSymboleRunning.style.display = 'inline';
+            specialSymboleBlinking.style.display = 'none';
+            specialSymboleFinished.style.display = 'none';
+            specialSymboleAvailable.style.display = 'none';
+        } else if (data.status === 'Blinking') {
+            specialSymboleDefect.style.display = 'none';
+            specialSymboleRunning.style.display = 'none';
+            specialSymboleBlinking.style.display = 'inline';
+            specialSymboleFinished.style.display = 'none';
+            specialSymboleAvailable.style.display = 'none';
+        } else if (data.status === 'Finished') {
+            specialSymboleDefect.style.display = 'none';
+            specialSymboleRunning.style.display = 'none';
+            specialSymboleBlinking.style.display = 'none';
+            specialSymboleFinished.style.display = 'inline';
+            specialSymboleAvailable.style.display = 'none';
+        } else if (data.status === 'Available') {
+            specialSymboleDefect.style.display = 'none';
+            specialSymboleRunning.style.display = 'none';
+            specialSymboleBlinking.style.display = 'none';
+            specialSymboleFinished.style.display = 'none';
+            specialSymboleAvailable.style.display = 'inline';
+        } else {
+            specialSymboleDefect.style.display = 'none';
+            specialSymboleRunning.style.display = 'none';
+            specialSymboleBlinking.style.display = 'none';
+            specialSymboleFinished.style.display = 'none';
+            specialSymboleAvailable.style.display = 'none';
+        }
+
+        if (data.status !== machineStatus.innerText) {
+            if (data.status === 'Available') {
+                showNotification(`Machine ${data.name} (${data.type}) can now be used`, 'success', 'info', true);
+            } else if (data.status === 'Finished') {
+                showNotification(`Machine ${data.name} (${data.type}) has finished`, 'success', 'info', true);
+            }
+        }
+
         machineStatus.innerText = data.status;
         machineStatus.classList.remove('Available', 'Running', 'Finished', 'Defect', 'Blinking', 'Unknown');
         machineStatus.classList.add(data.status);
@@ -282,6 +354,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // update machine button attributes
         machineBtn.setAttribute('data-machine-type', data.type);
         machineBtn.setAttribute('data-machine-status', data.status);
+
+        if (data.status === 'Finished') {
+            machineBtn.innerText = `mark as available`;
+        } else {
+            machineBtn.innerText = `start ${data.type.toLowerCase()}`;
+        }
 
         machineBtnHidden.setAttribute('data-machine-type', data.type);
         machineBtnHidden.setAttribute('data-machine-status', data.status);
@@ -298,15 +376,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const dataDonationMachine = document.getElementById('data-donation-machine');
 
         // dropdown buttons
-        const dataDonationAvailable = document.getElementById('data-donation-available');
         const dataDonationFinished = document.getElementById('data-donation-finished');
         const dataDonationRunning = document.getElementById('data-donation-running');
         const dataDonationBlinking = document.getElementById('data-donation-blinking');
         const dataDonationDefect = document.getElementById('data-donation-defect');
 
         // set attributes
-        dataDonationAvailable.setAttribute('data-machine-identifier', machine.identifier);
-        dataDonationAvailable.setAttribute('data-machine-status', 'Available');
         dataDonationFinished.setAttribute('data-machine-identifier', machine.identifier);
         dataDonationFinished.setAttribute('data-machine-status', 'Finished');
         dataDonationRunning.setAttribute('data-machine-identifier', machine.identifier);
@@ -317,37 +392,31 @@ document.addEventListener('DOMContentLoaded', function () {
         dataDonationDefect.setAttribute('data-machine-status', 'Defect');
 
         if (machine.status === 'Available') {
-            dataDonationAvailable.style.display = 'none';
             dataDonationFinished.style.display = 'block';
             dataDonationRunning.style.display = 'block';
             dataDonationBlinking.style.display = 'block';
             dataDonationDefect.style.display = 'block';
         } else if (machine.status === 'Running') {
-            dataDonationAvailable.style.display = 'block';
             dataDonationFinished.style.display = 'block';
             dataDonationRunning.style.display = 'none';
             dataDonationBlinking.style.display = 'block';
             dataDonationDefect.style.display = 'block';
         } else if (machine.status === 'Finished') {
-            dataDonationAvailable.style.display = 'block';
             dataDonationFinished.style.display = 'none';
             dataDonationRunning.style.display = 'block';
             dataDonationBlinking.style.display = 'block';
             dataDonationDefect.style.display = 'block';
         } else if (machine.status === 'Blinking') {
-            dataDonationAvailable.style.display = 'block';
             dataDonationFinished.style.display = 'block';
             dataDonationRunning.style.display = 'block';
             dataDonationBlinking.style.display = 'none';
             dataDonationDefect.style.display = 'block';
         } else if (machine.status === 'Defect') {
-            dataDonationAvailable.style.display = 'block';
             dataDonationFinished.style.display = 'block';
             dataDonationRunning.style.display = 'block';
             dataDonationBlinking.style.display = 'block';
             dataDonationDefect.style.display = 'none';
         } else {
-            dataDonationAvailable.style.display = 'block';
             dataDonationFinished.style.display = 'block';
             dataDonationRunning.style.display = 'block';
             dataDonationBlinking.style.display = 'block';
@@ -355,34 +424,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // set text
-        dataDonationTitle.innerText = `Data donation request for ${machine.name} (${machine.type})`;
+        dataDonationTitle.innerText = `Your data donation for ${machine.name} (${machine.type})`;
         dataDonationMachine.innerText = `${machine.name} (${machine.type}), not updated since ${machine.time}`;
 
         // open modal
         trigger.click();
     }
-
-    document.getElementById('data-donation-available').addEventListener('click', function () {
-        const machineIdentifier = this.getAttribute('data-machine-identifier');
-
-        fetch(`/${buildingIdentifier}/laundry/${machineIdentifier}/available/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    update()
-                    showNotification('Thank you for your data donation :)', 'success', 'info');
-                } else {
-                    showNotification('Failed to set machine as available', 'danger', 'error');
-                }
-            });
-
-        document.getElementById('data-donation-close').click();
-    });
 
     document.getElementById('data-donation-finished').addEventListener('click', function () {
         const machineIdentifier = this.getAttribute('data-machine-identifier');
@@ -478,7 +525,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('data-donation-close').click();
     });
 
-
+    update();
     // update machines every 5 seconds
     setInterval(update, 5000);
 });

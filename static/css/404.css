@@ -1,21 +1,23 @@
-.custom-404-background {
-    background-color: rgba(0, 0, 0, 0.8);
-    border-radius: 10px;
-    color: white;
-    padding: 20px;
-}
-
 .box-404 {
-   color: white;
-    background-color: rgba(142,86,59,0.95);
+    color: #20524F;
+    background-color: rgba(244, 162, 97, 0.85);
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
+.warning-message {
+    background-color: #20524F;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #F4A261;
+}
+
 /* home button */
 .home-button {
-    background-color: #079c93; /* Hauptfarbe */
-    color: white;
+    background-color: #20524F; /* Hauptfarbe */
+    color: #F4A261;
     border: none;
     border-radius: 15px;
     padding: 10px 20px;
@@ -33,17 +35,8 @@
 }
 
 .home-button:hover {
-    background-color: #ff640e; /* Hover-Farbe */
+    background-color: #F4A261; /* Hover-Farbe */
     transform: scale(1.05);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.home-button:active {
-    background-color: #490815; /* Active-Farbe */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.home-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px #018286; /* Focus-Farbe */
+    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.4);
+    color: #20524F;
 }

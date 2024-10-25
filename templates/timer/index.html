@@ -11,7 +11,7 @@
     <!-- needed for linking the static background image -->
     <style>
         body::before {
-            background-image: url('{% static 'media/bg-index-2.webp' %}');
+            background-image: url('{% static 'media/bg-index.webp' %}');
         }
     </style>
 {% endblock %}
@@ -43,13 +43,38 @@
         <div class="row">
             {% for machine in machines %}
                 <div id="machine_{{ machine.identifier }}" class="col-md-2 machine-card">
+                    <!-- symbols -->
+                    <div class="top-right-corner">
+                        <div class="warning-symbol moving-symbol" id="special-symbole-defect_{{ machine.identifier }}">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="running-dot-container moving-symbol" id="special-symbole-running_{{ machine.identifier }}">
+                            <div class="running-dot"></div>
+                            <div class="secondary-dot"></div>
+                        </div>
+                        <div class="blinking-icon-container moving-symbol" id="special-symbole-blinking_{{ machine.identifier }}">
+                            <i class="fas fa-lightbulb blinking-icon"></i>
+                        </div>
+                        <div class="finished-icon-container moving-symbol" id="special-symbole-finished_{{ machine.identifier }}">
+                            <i class="fas fa-thumbs-up finished-icon"></i>
+                        </div>
+                        <div class="available-icon-container moving-symbol" id="special-symbole-available_{{ machine.identifier }}">
+                            <i class="fas fa-check-circle available-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- machine header -->
                     <div class="machine-header">
                         {{ machine.name }} ({{ machine.type }})
                         <span class="badge {{ machine.status }}" id="machine-status_{{ machine.identifier }}">{{ machine.status }}</span>
                     </div>
+
+                    <!-- machine body -->
                     <div class="machine-body">
                         <div id="machine-time_{{ machine.identifier }}" class="machine-time">{{ machine.time }}</div>
                     </div>
+
+                    <!-- machine footer -->
                     <div class="machine-footer">
                         <!-- middleware button to open modal -->
                         <button class="machine-btn" id="machine-btn_{{ machine.identifier }}"
@@ -78,37 +103,5 @@
     {% include 'includes/timer-modal.html' %}
 
     <!-- Data Donation Modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#data-donation-modal" style="display: none" id="data-donation-btn">
-        Data Donation
-    </button>
-    <div class="modal fade" id="data-donation-modal" tabindex="-1" aria-labelledby="data-donation-modal-label" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="data-donation-modal-label">Data Donation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Please mark the following machine to help keep things up to date.</p>
-                    <div id="data-donation-machine"></div>
-                </div>
-                <div class="modal-footer">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            Select Status
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="statusDropdownMenu">
-                            <li><button class="dropdown-item Running" id="data-donation-running">Running</button></li>
-                            <li><button class="dropdown-item Available" id="data-donation-available">Available</button></li>
-                            <li><button class="dropdown-item Finished" id="data-donation-finished">Finished</button></li>
-                            <li><button class="dropdown-item Defect" id="data-donation-defect">Defect</button></li>
-                            <li><button class="dropdown-item Blinking" id="data-donation-blinking">Blinking</button></li>
-                        </ul>
-                    </div>
-
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="data-donation-close">Unchanged</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include 'includes/donation-modal.html' %}
 {% endblock %}

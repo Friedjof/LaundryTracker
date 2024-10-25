@@ -13,18 +13,14 @@ body::before {
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
-    filter: blur(15px); /* Blur-Effekt */
-    z-index: -1; /* Hinter den eigentlichen Inhalt stellen */
+    filter: blur(7px);
+    z-index: -1;
 }
 
 .disclaimer-note {
-    background: linear-gradient(to right, rgba(255, 240, 178, 0) 0%, rgba(255, 240, 178, 1) 50%, rgba(255, 240, 178, 0) 100%);
+    background: linear-gradient(to right, rgba(255, 240, 178, 0%) 0%, rgb(250, 220, 144) 20%, rgb(250, 220, 144) 80%, rgba(255, 240, 178, 0%) 100%);
     font-size: 0.875em;
     margin: 0;
-}
-
-.defect-link {
-    color: #ff0000;
 }
 
 .defect-form {
@@ -36,22 +32,28 @@ body::before {
     width: 100%;
 }
 
-.machine-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    background: white;
-    border-radius: 10px;
-}
-
 .machine-card {
-    background-color: #f1f1f1;
-    border: 1px solid #ccc;
+    position: relative;
+    background-color: #fadc90;
+    border: 2px solid #20524F;
     border-radius: 10px;
     padding: 5px;
     margin: 5px;
     text-align: center;
     display: inline-block;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+@media (max-width: 768px) {
+    .machine-card {
+        width: 80%;
+    }
+}
+
+.machine-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    transform: scale(1.05);
 }
 
 .machine-header {
@@ -70,15 +72,22 @@ body::before {
 }
 
 .machine-btn {
-    background-color: #007bff;
+    background-color: #20524F;
+    color: #FADC90;
     width: 90%;
-    color: white;
     border: none;
     border-radius: 10px;
     padding: 5px 10px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.machine-btn:hover {
+    background-color: #36BA98;
+    color: #20524F;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .full-width-span {
@@ -88,11 +97,6 @@ body::before {
 
 .modal-title + .badge {
     margin-left: 10px; /* Adjust the value as needed */
-}
-
-#defect-link {
-    color: #ff640e;
-    text-decoration: none;
 }
 
 #defect-form {
@@ -106,39 +110,186 @@ body::before {
 
 /* CSS classes for different machine statuses */
 span.Available, button.Available {
-    background-color: #28a745; /* Green */
+    background-color: #36BA98; /* Green */
     color: white;
 }
 
-span.Finished, button.Finished {
-    background-color: #007bff; /* Blue */
-    color: white;
+span.Finished {
+    background-color: #36BA98; /* Ein aufforderndes Orange-Rot, das zum Handeln anregt */
+    color: #20524F;
+}
+
+button.Finished:hover {
+    background-color: #20524F; /* Petrol für den Hover-Effekt */
+    color: #FADC90;
 }
 
 span.Running, button.Running {
-    background-color: #ffc107; /* Yellow */
-    color: black;
+    background-color: #008CBA; /* Blau, das professionell und stabil wirkt */
+    color: white;
+}
+
+button.Running:hover {
+    background-color: #20524F; /* Petrol für den Hover-Effekt */
+    color: #FADC90;
 }
 
 span.Defect, button.Defect {
-    background-color: #dc3545; /* Red */
+    background-color: #E76F51; /* Reddish aus deinem Schema */
     color: white;
+}
+
+button.Defect:hover {
+    background-color: #20524F; /* Petrol für den Hover-Effekt */
+    color: #FADC90;
 }
 
 span.Blinking, button.Blinking {
-    background-color: #17a2b8; /* Teal */
+    background-color: #6C757D; /* Neutrales Grau für eine weniger kritische Aktion */
     color: white;
+}
+
+button.Blinking:hover {
+    background-color: #20524F; /* Petrol für den Hover-Effekt */
+    color: #FADC90;
 }
 
 span.Unknown, button.Unknown {
-    background-color: #6c757d; /* Gray */
+    background-color: #343A40; /* Dunkles Grau, um Unsicherheiten visuell darzustellen */
     color: white;
 }
 
+button.Unknown:hover {
+    background-color: #20524F; /* Petrol für den Hover-Effekt */
+    color: #FADC90;
+}
+
 a.IsWorking {
-    color: #28a745; /* Green */
+    color: #20524F; /* Grün aus deinem Schema */
 }
 
 a.IsDefect {
-    color: #dc3545; /* Red */
+    color: #E76F51; /* Reddish aus deinem Schema */
+}
+
+
+/* CSS classes for the moving symbols */
+.warning-symbol {
+    position: absolute;
+    right: -3px;
+    font-size: 20px; /* Adjust as needed */
+    color: #E76F51;
+    animation: move-warning-symbol 1s infinite alternate;
+}
+
+@keyframes move-warning-symbol {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+/* CSS class for the running dot */
+.running-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #008CBA; /* Grüne Farbe aus deinem Schema für den Running-Status */
+    border-radius: 50%;
+    position: relative;
+    animation: shadow-pulse 2s infinite;
+}
+
+/* Keyframes for the shadow-pulse animation */
+@keyframes shadow-pulse {
+    0% {
+        box-shadow: 0 0 5px 3px rgb(0, 140, 186); /* Pulsierender Effekt mit #36BA98 */
+    }
+    50% {
+        box-shadow: 0 0 10px 8px rgb(54, 186, 152); /* Verstärkter Puls mit #F4A261 für einen aktiven Look */
+    }
+    100% {
+        box-shadow: 0 0 5px 3px rgb(0, 140, 186); /* Rückkehr zu #36BA98 */
+    }
+}
+
+/* CSS classes for blinking icons */
+.blinking-icon-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9999;
+    /* center text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blinking-icon {
+    font-size: 20px; /* Adjust as needed */
+    color: #E76F51; /* Neutrales Grau für eine weniger kritische Aktion */
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    animation: blink 3s infinite;
+}
+
+@keyframes blink {
+    0% {
+        box-shadow: 0 0 5px 3px #FADC90; /* Pulsierender Effekt mit #36BA98 */
+    }
+    50% {
+        box-shadow: 0 0 10px 8px #F4A261; /* Verstärkter Puls mit #F4A261 für einen aktiven Look */
+    }
+    100% {
+        box-shadow: 0 0 5px 3px #FADC90; /* Rückkehr zu #36BA98 */
+    }
+}
+
+/* CSS classes for finished icons */
+.finished-icon-container {
+    position: absolute;
+    top: 0;
+    right: -3px;
+    z-index: 9999;
+}
+
+.finished-icon {
+    font-size: 20px; /* Adjust as needed */
+    color: #36BA98; /* Green color for finished status */
+    animation: finished-icon-moving 3s infinite;
+}
+
+@keyframes finished-icon-moving {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* CSS classes for available icons */
+.available-icon-container {
+    position: absolute;
+    top: 0;
+    right: -3px;
+}
+
+.available-icon {
+    font-size: 20px; /* Adjust as needed */
+    color: #36BA98; /* Green color for available status */
+}
+
+.moving-symbol {
+    display: none;
+}
+
+.moving-symbol:hover {
+    transform: scale(2);
+    transition: transform 2s;
 }

@@ -1,19 +1,28 @@
 .home-container {
     color: black;
-    background-color: rgba(232,219,184,0.95);
+    background-color: rgba(233, 196, 106, 0.9);
     border-radius: 10px;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 12px 24px rgba(0, 0, 0, 0.3);
     transition: box-shadow 0.3s ease-in-out;
 }
 
 .home-container:hover {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4), 0 24px 48px rgba(0, 0, 0, 0.3);
+}
+
+.warning-message {
+    background-color: #20524F;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #E9C46A;
 }
 
 /* home page round github link button */
 .github-button {
-    background-color: #243a60;
-    color: white;
+    background-color: #20524F;
+    color: #E9C46A;
     border: none;
     border-radius: 15px;
     padding: 10px 20px;
@@ -27,14 +36,10 @@
 }
 
 .github-button:hover {
-    background-color: #c75333;
+    background-color: #E9C46A;
     transform: scale(1.05);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.github-button:active {
-    background-color: #d44020;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.4);
+    color: #20524F;
 }
 
 .github-button:focus {

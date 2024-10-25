@@ -21,12 +21,9 @@ body {
     justify-content: center;
 }
 
-.warning-message {
-    background-color: rgb(220, 170, 31);
-    padding: 5px;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 0.9em;
-    border: 2px dotted black;
-    color: black;
+.top-right-corner {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    z-index: 2;
 }

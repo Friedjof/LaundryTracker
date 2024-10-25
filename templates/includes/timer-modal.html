@@ -1,21 +1,20 @@
 <!-- machine modal -->
 <div class="modal fade" id="machine-modal" tabindex="-1" aria-labelledby="machine-modal-label" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
+        <div class="modal-content custom-modal">
+            <div class="modal-header custom-modal-header">
                 <h5 class="modal-title" id="machine-modal-label">Machine Settings</h5>
                 <span class="badge Unknown" id="modal-machine-status">Loading…</span>
 
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <div class="modal-body">
-                <span class="badge bg-danger full-width-span" id="defect-badge">Loading…</span>
+            <div class="modal-body custom-modal-body">
+                <span class="badge machine-modal-note full-width-span" id="defect-badge">Loading…</span>
                 <form id="machine-form" method="POST">
                     {% csrf_token %}
                     <label for="modal-machine-duration">Enter machine duration (in minutes):</label>
-                    <input type="number" id="modal-machine-duration" name="machine-duration" class="form-control" required min="1">
+                    <input type="number" id="modal-machine-duration" name="machine-duration" class="form-control modal-duration" required min="1">
                     <input type="hidden" id="modal-machine-identifier" name="machine-identifier">
                 </form>
 
@@ -27,21 +26,21 @@
                     <form id="modal-defect-form" method="POST">
                         {% csrf_token %}
                         <label for="isDefectNote" id="isDefectNoteLabel">Enter a short note about the defect:</label>
-                        <input type="text" id="isDefectNote" name="isDefectNote" class="form-control" placeholder="Enter defect note (optional but recommended)" maxlength="59">
+                        <input type="text" id="isDefectNote" name="isDefectNote" class="form-control modal-note" placeholder="Enter defect note (optional but recommended)" maxlength="59">
                         <input type="hidden" id="machineId" name="machineId">
 
                         <div class="d-flex justify-content-center align-items-center mt-3">
-                            <button type="submit" class="btn btn-danger w-100 me-2" id="set-defect-btn" form="defectForm">Mark as defect</button>
-                            <button type="button" class="btn btn-success w-100 me-2" id="repair-btn">Mark as repaired</button>
-                            <button type="button" class="btn btn-warning w-100" id="is-blinking-btn">Machine is blinking</button>
+                            <button type="submit" class="btn w-100 me-2 modal-defect-btn" id="set-defect-btn" form="defectForm">Mark as defect</button>
+                            <button type="button" class="btn w-100 me-2 modal-repair-btn" id="repair-btn">Mark as repaired</button>
+                            <button type="button" class="btn w-100 modal-blinking-btn" id="is-blinking-btn">Machine is blinking</button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalBtn">Close</button>
-                <button type="submit" class="btn btn-primary" id="start-machine-btn" form="machine-form">Start Machine</button>
+            <div class="modal-footer custom-modal-footer">
+                <button type="button" class="btn modal-close-btn" data-bs-dismiss="modal" id="closeModalBtn">Close</button>
+                <button type="submit" class="btn modal-start-btn" id="start-machine-btn" form="machine-form">Start Machine</button>
             </div>
         </div>
     </div>

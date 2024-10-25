@@ -1,11 +1,16 @@
+.laundry-header {
+    background: #20524F;
+}
+
 .header-image {
     width: 40px;
     height: 40px;
+    border-radius: 7px;
 }
 
 .description {
-    background-color: rgba(105, 59, 54, 1); /* Etwas transparenter */
-    color: #f4f0bc;
+    background-color: #E76F51;
+    color: #20524F;
     border: none;
     padding: 5px;
     display: flex;

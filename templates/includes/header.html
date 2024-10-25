@@ -1,9 +1,11 @@
 {% load static %}
 
 <header>
-    <div class="row align-items-center bg-dark text-white p-1 mx-2">
+    <div class="row align-items-center text-white p-1 mx-2 laundry-header">
         <div class="col-auto m-0 p-1">
-            <img src="{% static 'media/favicon.webp' %}" class="header-image" alt="Icon">
+            <a href="/">
+                <img src="{% static 'media/favicon.webp' %}" class="header-image" alt="Icon">
+            </a>
         </div>
         <div class="col text-start m-0 px-2">
             <h1 class="mb-1">{{ title }}</h1>
@@ -21,18 +23,18 @@
     <!-- Modal -->
     <div class="modal fade" id="building-modal" tabindex="-1" aria-labelledby="building-modal-label" aria-hidden="true">
       <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
+        <div class="modal-content custom-modal">
+          <div class="modal-header custom-modal-header">
             <h5 class="modal-title" id="building-modal-label">{{ building }}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body custom-modal-body">
             <p class="no-other-styles">
                 {{ building_description|safe }}
             </p>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <div class="modal-footer custom-modal-footer">
+            <button type="button" class="btn modal-close-btn" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

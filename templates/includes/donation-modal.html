@@ -1,0 +1,31 @@
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#data-donation-modal" style="display: none" id="data-donation-btn">
+    Data Donation
+</button>
+<div class="modal fade" id="data-donation-modal" tabindex="-1" aria-labelledby="data-donation-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content custom-modal">
+            <div class="modal-header custom-modal-header">
+                <h5 class="modal-title custom-modal-title" id="data-donation-modal-label">Data Donation</h5>
+            </div>
+            <div class="modal-body custom-modal-body">
+                <p class="modal-donation-test">Please mark the following machine to help keep things up to date.</p>
+                <div class="modal-donation-note" id="data-donation-machine"></div>
+            </div>
+            <div class="modal-footer custom-modal-footer">
+                <div class="dropdown">
+                    <button class="btn modal-select-btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Status
+                    </button>
+                    <ul class="dropdown-menu modal-dropdown" aria-labelledby="dropdownMenuButton" id="statusDropdownMenu">
+                        <li><button class="dropdown-item Running" id="data-donation-running">Running</button></li>
+                        <li><button class="dropdown-item Finished" id="data-donation-finished">Finished</button></li>
+                        <li><button class="dropdown-item Defect" id="data-donation-defect">Defect</button></li>
+                        <li><button class="dropdown-item Blinking" id="data-donation-blinking">Blinking</button></li>
+                    </ul>
+                </div>
+
+                <button type="button" class="btn modal-close-btn" data-bs-dismiss="modal" id="data-donation-close">Unchanged</button>
+            </div>
+        </div>
+    </div>
+</div>

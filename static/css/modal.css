@@ -1,0 +1,153 @@
+.custom-modal {
+    background: #FADC90; /* Heller Hintergrund */
+    color: #20524F; /* Dunkler Text */
+    border-radius: 8px; /* Optionale Abrundung für ein weicheres Erscheinungsbild */
+    padding: 5px; /* Optionale Innenabstände für bessere Lesbarkeit */
+}
+
+.custom-modal-title {
+    width: 100%;
+    text-align: center;
+}
+
+.custom-modal-header {
+    background: #20524F; /* Petrol für den Header */
+    color: #FADC90; /* Heller Text */
+    border: 2px solid #FADC90; /* Farbe des Headers */
+    border-radius: 8px 8px 0 0; /* Abrundung nur oben */
+}
+
+.custom-modal-body {
+    background: #FADC90; /* Heller Hintergrund */
+    color: #20524F; /* Dunkler Text */
+}
+
+.custom-modal-footer {
+    background: #20524F; /* Petrol für den Footer */
+    color: #FADC90; /* Heller Text */
+    border: 2px solid #FADC90; /* Farbe des Footers */
+    border-radius: 0 0 8px 8px; /* Abrundung nur unten */
+}
+
+.modal-dropdown {
+    background: #20524F; /* Heller Hintergrund */
+    border: 3px solid #20524F; /* Farbe des Dropdowns */
+    padding: 2px; /* Innenabstand für bessere Lesbarkeit */
+}
+
+.modal-donation-test {
+    width: 100%;
+    text-align: center;
+}
+
+.modal-donation-note {
+    background: #E76F51; /* Reddish für Notizen */
+    color: #FADC90; /* Heller Text */
+    width: 100%;
+    text-align: center;
+    border-radius: 8px; /* Abrundung für ein weicheres Erscheinungsbild */
+}
+
+span.machine-modal-note {
+    background: #E76F51; /* Reddish für Notizen */
+    color: #FADC90; /* Heller Text */
+}
+
+input.modal-duration, input.modal-note {
+    background: #FADC90; /* Heller Hintergrund */
+    color: #20524F; /* Dunkler Text */
+    border: 2px solid #20524F;
+}
+
+input.modal-duration:focus,
+input.modal-note:focus {
+    background: #FADC90; /* Beibehalten des hellen Hintergrunds bei Fokussierung */
+    color: #20524F; /* Textfarbe bleibt gleich */
+    border: 2px solid #20524F;
+}
+
+input.modal-duration:active,
+input.modal-note:active {
+    background: #FADC90; /* Beibehalten des hellen Hintergrunds bei Aktivierung */
+    color: #20524F;
+    border: 2px solid #20524F;
+}
+
+input.modal-duration:hover,
+input.modal-note:hover {
+    background: #FADC90; /* Beibehalten des hellen Hintergrunds beim Hover */
+    color: #20524F;
+    border: 2px solid #20524F;
+}
+
+input.modal-duration:disabled,
+input.modal-note:disabled {
+    background: #F4A261; /* Heller Hintergrund bei Deaktivierung */
+    color: #20524F;
+}
+
+button.modal-defect-btn {
+    background: #E76F51; /* Reddish für Defekte */
+    color: white;
+    border: 1px solid #FADC90;
+}
+
+button.modal-defect-btn:hover {
+    background: #20524F; /* Hover-Effekt in Petrol */
+    color: #FADC90;
+}
+
+button.modal-repair-btn {
+    background: #36BA98; /* Blau für Reparaturen */
+    color: white;
+    border: 1px solid #FADC90;
+}
+
+button.modal-repair-btn:hover {
+    background: #20524F; /* Hover-Effekt in Petrol */
+    color: #FADC90;
+}
+
+button.modal-blinking-btn {
+    background: #6C757D; /* Neutralgrau für den Blinkstatus */
+    color: white;
+    border: 1px solid #FADC90;
+}
+
+button.modal-blinking-btn:hover {
+    background: #20524F; /* Hover-Effekt in Petrol */
+    color: #FADC90;
+}
+
+button.modal-start-btn {
+    background: #36BA98; /* Grün für den Start */
+    color: white;
+    border: 1px solid #FADC90;
+}
+
+button.modal-start-btn:hover {
+    background: #20524F; /* Hover-Effekt in Petrol */
+    color: #FADC90;
+}
+
+button.modal-close-btn {
+    background: #343A40; /* Dunkelgrau für die Schließen-Taste */
+    color: white;
+    border: 1px solid #FADC90;
+}
+
+button.modal-close-btn:hover {
+    background: #20524F; /* Hover-Effekt in Petrol */
+    color: #FADC90;
+}
+
+button.modal-select-btn {
+    background: #E76F51; /* Petrol für die Auswahl */
+    color: #FADC90;
+    border: 1px solid #FADC90;
+}
+
+button.modal-select-btn:hover {
+    background: #36BA98; /* Hover-Effekt in Grün */
+    color: white;
+}

@@ -1,9 +1,19 @@
 .notification-container {
     position: fixed;
     top: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     padding: 1rem;
     z-index: 11;
+    width: 30%;
+}
+
+@media (max-width: 768px) {
+    .notification-container {
+        width: 100%;
+        left: 0;
+        transform: none;
+    }
 }
 
 .notification-container .alert {

@@ -105,7 +105,7 @@ def set_timer(request, building, machine_id):
 
     return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
 
-def available(request, building, machine_id):
+def set_available(request, building, machine_id):
     if request.method == 'POST':
         try:
             machine = Machine.objects.get(identifier=machine_id, building=building)
