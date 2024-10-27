@@ -34,7 +34,7 @@ body::before {
 
 .machine-card {
     position: relative;
-    background-color: #fadc90;
+    background-color: white;
     border: 2px solid #20524F;
     border-radius: 10px;
     padding: 5px;
@@ -73,7 +73,7 @@ body::before {
 
 .machine-btn {
     background-color: #20524F;
-    color: #FADC90;
+    color: white;
     width: 90%;
     border: none;
     border-radius: 10px;
@@ -111,12 +111,12 @@ body::before {
 /* CSS classes for different machine statuses */
 span.Available, button.Available {
     background-color: #36BA98; /* Green */
-    color: white;
+    color: #20524F;
 }
 
 span.Finished {
     background-color: #36BA98; /* Ein aufforderndes Orange-Rot, das zum Handeln anregt */
-    color: #20524F;
+    color: white;
 }
 
 button.Finished:hover {
