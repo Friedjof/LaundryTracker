@@ -1,9 +1,6 @@
-from datetime import datetime
-
 import markdown
 import bleach
 
-from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -17,7 +14,7 @@ def index(request, building):
     try:
         building = Building.objects.get(identifier=building)
     except ObjectDoesNotExist:
-        return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+        return render(request, 'timer/404.html', status=404)
 
     if request.method == 'POST':
         # POST-Request: Aktuellen Maschinenstatus als JSON zurückgeben
@@ -69,8 +66,7 @@ def index(request, building):
                 'building': building.get_name(),
                 'building_identifier': building.identifier,
                 'building_description': markdown.markdown(bleach.clean(building.description)),
-                'machines': machines,
-                'year': datetime.now().year
+                'machines': machines
             }
         )
 
@@ -103,7 +99,7 @@ def set_timer(request, building, machine_id):
             return JsonResponse({'status': 'success', 'ask_for': None})
         return JsonResponse({'status': 'error', 'message': 'Machine is not available'}, status=400)
 
-    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+    return render(request, 'timer/404.html', status=404)
 
 def set_available(request, building, machine_id):
     if request.method == 'POST':
@@ -122,7 +118,7 @@ def set_available(request, building, machine_id):
         else:
             return JsonResponse({'status': 'error', 'message': 'Machine is not finished'}, status=400)
 
-    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+    return render(request, 'timer/404.html', status=404)
 
 def get_notes(request, building, machine_id):
     if request.method == 'POST':
@@ -133,7 +129,7 @@ def get_notes(request, building, machine_id):
 
         return JsonResponse({'status': 'success', 'notes': machine.get_notes()})
 
-    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+    return render(request, 'timer/404.html', status=404)
 
 def set_defect(request, building, machine_id):
     if request.method == 'POST':
@@ -151,7 +147,7 @@ def set_defect(request, building, machine_id):
 
         return JsonResponse({'status': 'success'})
 
-    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+    return render(request, 'timer/404.html', status=404)
 
 def set_repair(request, building, machine_id):
     if request.method == 'POST':
@@ -169,7 +165,7 @@ def set_repair(request, building, machine_id):
 
         return JsonResponse({'status': 'success'})
 
-    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+    return render(request, 'timer/404.html', status=404)
 
 def set_blinking(request, building, machine_id):
     if request.method == 'POST':
@@ -181,7 +177,7 @@ def set_blinking(request, building, machine_id):
         machine.set_blinking()
         return JsonResponse({'status': 'success'})
 
-    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+    return render(request, 'timer/404.html', status=404)
 
 def set_finished(request, building, machine_id):
     if request.method == 'POST':
@@ -193,10 +189,10 @@ def set_finished(request, building, machine_id):
         machine.set_finished()
         return JsonResponse({'status': 'success'})
 
-    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+    return render(request, 'timer/404.html', status=404)
 
 def page_not_found(request, exception):
-    return render(request, 'timer/404.html', {'year': datetime.now().year}, status=404)
+    return render(request, 'timer/404.html', status=404)
 
 def homepage(request):
-    return render(request, 'timer/home.html', {'year': datetime.now().year})
+    return render(request, 'timer/home.html')
