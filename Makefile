@@ -37,24 +37,25 @@ clean: down
 
 release:
 	@echo "Creating release"
-	ifndef v
-		$(error v is not defined)
-	endif
-	@echo "Checkout main"
-	@git checkout main
-	@echo "Pulling main"
-	@git pull origin main
-	@echo "Create version.txt"
-	echo $(v) > version.txt
-	@echo "Committing version.txt"
-	@git add version.txt
-	@git commit -m "Bump version to $(v)"
-	@echo "Pushing version.txt"
-	@git push origin main
-	@echo "Creating tag $(v)"
-	@git tag $(v)
-	@echo "Pushing tag $(v)"
-	@git push origin $(v)
+	@if [ -z "$(v)" ]; then \
+		read -p "Enter version (v): " v; \
+	fi; \
+	echo "Version: $$v"; \
+	echo "Checkout main"; \
+	git checkout main; \
+	echo "Pulling main"; \
+	git pull origin main; \
+	echo "Create version.txt"; \
+	echo $$v > version.txt; \
+	echo "Committing version.txt"; \
+	git add version.txt; \
+	git commit -m "Bump version to $$v"; \
+	echo "Pushing version.txt"; \
+	git push origin main; \
+	echo "Creating tag $$v"; \
+	git tag $$v; \
+	echo "Pushing tag $$v"; \
+	git push origin $$v
 
 version:
 	@echo "Updating version.txt with latest tag"
