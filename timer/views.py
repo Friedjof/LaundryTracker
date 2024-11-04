@@ -191,6 +191,18 @@ def set_finished(request, building, machine_id):
 
     return render(request, 'timer/404.html', status=404)
 
+def set_unchanged(request, building, machine_id):
+    if request.method == 'POST':
+        try:
+            machine = Machine.objects.get(identifier=machine_id, building=building)
+        except ObjectDoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Invalid machine or building'}, status=400)
+
+        machine.set_unchanged()
+        return JsonResponse({'status': 'success'})
+
+    return render(request, 'timer/404.html', status=404)
+
 def page_not_found(request, exception):
     return render(request, 'timer/404.html', status=404)
 

@@ -220,6 +220,31 @@ class Machine(models.Model):
         self.timer_start = timezone.now()
         self.save()
 
+    def set_unchanged(self):
+        if self.machine_status == 'A':
+            self.timer = 0
+            self.timer_start = timezone.now()
+            self.save()
+        elif self.machine_status == 'R':
+            r = self.remaining_time()
+            self.timer = r
+            self.timer_start = timezone.now() - timezone.timedelta(minutes=r)
+            self.save()
+        elif self.machine_status == 'D':
+            self.timer = 0
+            self.timer_start = timezone.now()
+            self.save()
+        elif self.machine_status == 'B':
+            r = self.remaining_time()
+            self.timer = r
+            self.timer_start = timezone.now() - timezone.timedelta(minutes=r)
+            self.save()
+        else:
+            self.machine_status = 'U'
+            self.timer = 0
+            self.timer_start = timezone.now()
+            self.save()
+
     @staticmethod
     def get_longest_unused_machine(building: uuid.UUID) -> 'Machine' or None:
         machines = Machine.objects.filter(building=building).order_by('timer_start')

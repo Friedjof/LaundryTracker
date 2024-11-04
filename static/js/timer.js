@@ -385,6 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const dataDonationRunning = document.getElementById('data-donation-running');
         const dataDonationBlinking = document.getElementById('data-donation-blinking');
         const dataDonationDefect = document.getElementById('data-donation-defect');
+        const unchangedBtn = document.getElementById('data-donation-close');
 
         // set attributes
         dataDonationFinished.setAttribute('data-machine-identifier', machine.identifier);
@@ -395,6 +396,7 @@ document.addEventListener('DOMContentLoaded', function () {
         dataDonationBlinking.setAttribute('data-machine-status', 'Blinking');
         dataDonationDefect.setAttribute('data-machine-identifier', machine.identifier);
         dataDonationDefect.setAttribute('data-machine-status', 'Defect');
+        unchangedBtn.setAttribute('data-machine-identifier', machine.identifier);
 
         if (machine.status === 'Available') {
             dataDonationFinished.style.display = 'block';
@@ -455,35 +457,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-        document.getElementById('data-donation-close').click();
+        const modalInstance = bootstrap.Modal.getInstance(document.getElementById('data-donation-modal'));
+        if (modalInstance) {
+            modalInstance.hide();
+        }
     });
 
     document.getElementById('data-donation-running').addEventListener('click', function () {
         const machineIdentifier = this.getAttribute('data-machine-identifier');
 
-        const formData = new FormData();
-        formData.append('machineId', machineIdentifier);
-        formData.append('timerDuration', '60');
-        formData.append('will_ask_for_data_donation', 'false');
+        const machineBtn = document.getElementById(`machine-btn_${machineIdentifier}`);
 
-        fetch(`/${buildingIdentifier}/laundry/${machineIdentifier}/`, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': csrfToken
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                update();
-                showNotification('Thank you for your data donation :)', 'success', 'info');
-            } else {
-                showNotification('Failed to start machine', 'danger', 'error');
-            }
-        });
+        const modalInstance = bootstrap.Modal.getInstance(document.getElementById('data-donation-modal'));
+        if (modalInstance) {
+            modalInstance.hide();
+        }
 
-        document.getElementById('data-donation-close').click();
+        machineBtn.click();
+
+        showNotification('Thank you for your data donation :)', 'success', 'info');
     });
 
     document.getElementById('data-donation-blinking').addEventListener('click', function () {
@@ -505,7 +497,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-        document.getElementById('data-donation-close').click();
+        const modalInstance = bootstrap.Modal.getInstance(document.getElementById('data-donation-modal'));
+        if (modalInstance) {
+            modalInstance.hide();
+        }
     });
 
     document.getElementById('data-donation-defect').addEventListener('click', function () {
@@ -527,7 +522,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-        document.getElementById('data-donation-close').click();
+        const modalInstance = bootstrap.Modal.getInstance(document.getElementById('data-donation-modal'));
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+    });
+
+    document.getElementById('data-donation-close').addEventListener('click', function () {
+        const machineIdentifier = this.getAttribute('data-machine-identifier');
+
+        fetch(`/${buildingIdentifier}/laundry/${machineIdentifier}/unchanged/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    update()
+                    showNotification('Thank you for your data donation :)', 'success', 'info');
+                } else {
+                    showNotification('Failed to set machine as unchanged', 'danger', 'error');
+                }
+            });
     });
 
     update();

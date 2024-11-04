@@ -2,7 +2,7 @@ import uuid
 
 from django.urls import path, register_converter
 
-from .views import index, set_timer, get_notes, set_available, set_defect, set_repair, set_blinking, set_finished, page_not_found, homepage
+from .views import index, set_timer, get_notes, set_available, set_defect, set_repair, set_blinking, set_finished, set_unchanged, page_not_found, homepage
 
 
 class UUIDConverter:
@@ -16,6 +16,7 @@ class UUIDConverter:
     def to_url(value):
         return str(value)
 
+
 register_converter(UUIDConverter, 'uuid')
 
 handler404 = page_not_found
@@ -28,7 +29,8 @@ urlpatterns = [
     path('<uuid:building>/laundry/<uuid:machine_id>/repair/', set_repair, name='set_repair'),
     path('<uuid:building>/laundry/<uuid:machine_id>/blinking/', set_blinking, name='set_blinking'),
     path('<uuid:building>/laundry/<uuid:machine_id>/finished/', set_finished, name='set_finished'),
-    path('<uuid:building>/laundry/<uuid:machine_id>/available/', set_available, name='available'),
+    path('<uuid:building>/laundry/<uuid:machine_id>/available/', set_available, name='set_available'),
+    path('<uuid:building>/laundry/<uuid:machine_id>/unchanged/', set_unchanged, name='set_unchanged'),
     path('404', lambda request: page_not_found(request, None), name='404'),
     path('', homepage, name='homepage'),
 ]
