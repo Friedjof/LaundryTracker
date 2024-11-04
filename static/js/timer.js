@@ -85,6 +85,9 @@ document.addEventListener('DOMContentLoaded', function () {
             isDefectNoteInput.style.display = 'block';
             isDefectNoteLabel.style.display = 'block';
 
+            // disable duration input
+            modalMachineDurationInput.disabled = false;
+
             // hide repair button
             repairBtn.style.display = 'none';
 
@@ -145,6 +148,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     modalInstance.hide();
                 }
                 update();
+
+                console.log(data.ask_for);
 
                 if (data.ask_for) {
                     dataDonation(data.ask_for);

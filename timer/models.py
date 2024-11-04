@@ -247,10 +247,10 @@ class Machine(models.Model):
 
     @staticmethod
     def get_longest_unused_machine(building: uuid.UUID) -> 'Machine' or None:
-        machines = Machine.objects.filter(building=building).order_by('timer_start')
+        machines = Machine.objects.filter(building=building, timer_start__lt=(timezone.now() - timezone.timedelta(hours=12))).order_by('timer_start')
 
         if machines.exists():
-            return random.choice(machines[:4])
+            return random.choice(machines)
         return None
 
     @staticmethod
